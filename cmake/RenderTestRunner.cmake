@@ -1,7 +1,7 @@
 find_program(DIFF_EXECUTABLE diff)
 
 if(NOT DIFF_EXECUTABLE)
-    message(STATUS "WARNING: `diff` executable not found")
+    message(FATAL_ERROR "`diff` executable not found")
 endif()
 
 set(_rtr_base_dir "${CMAKE_CURRENT_LIST_DIR}")
@@ -11,10 +11,6 @@ function(render_test_runner)
     set(_one_value_args TARGET VERSION)
     set(_multi_value_args)
     cmake_parse_arguments(_rtr "${_options}" "${_one_value_args}" "${_multi_value_args}" ${ARGN})
-
-    if(NOT DIFF_EXECUTABLE)
-        return()
-    endif()
 
     if(_rtr_VERSION)
         set(_rtr_VERSION "_${_rtr_VERSION}")
