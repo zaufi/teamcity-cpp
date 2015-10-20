@@ -136,7 +136,7 @@ void TeamcityBoostLogFormatter::log_finish(std::ostream &/*out*/)
 void TeamcityBoostLogFormatter::log_build_info(std::ostream &/*out*/)
 {}
 
-void TeamcityBoostLogFormatter::test_unit_start(std::ostream &out, boost::unit_test::test_unit const& tu)
+void TeamcityBoostLogFormatter::test_unit_start(std::ostream &out, const boost::unit_test::test_unit& tu)
 {
     messages.setOutput(out);
 
@@ -148,11 +148,11 @@ void TeamcityBoostLogFormatter::test_unit_start(std::ostream &out, boost::unit_t
     currentDetails.clear();
 }
 
-void TeamcityBoostLogFormatter::test_unit_finish(std::ostream &out, boost::unit_test::test_unit const& tu, unsigned long elapsed)
+void TeamcityBoostLogFormatter::test_unit_finish(std::ostream &out, const boost::unit_test::test_unit& tu, unsigned long elapsed)
 {
     messages.setOutput(out);
 
-    boost::unit_test::test_results const& tr = boost::unit_test::results_collector.results(tu.p_id);
+    const boost::unit_test::test_results& tr = boost::unit_test::results_collector.results(tu.p_id);
     if (tu.p_type == UNIT_TEST_CASE)
     {
         if (!tr.passed())
@@ -197,7 +197,11 @@ void TeamcityBoostLogFormatter::log_entry_finish(std::ostream& out)
 
 #if BOOST_VERSION < 105900
 
-void TeamcityBoostLogFormatter::log_exception(std::ostream& out, const boost::unit_test::log_checkpoint_data&, boost::unit_test::const_string explanation)
+void TeamcityBoostLogFormatter::log_exception(
+    std::ostream& out
+  , const boost::unit_test::log_checkpoint_data&
+  , boost::unit_test::const_string explanation
+  )
 {
     out << explanation << std::endl;
     currentDetails += toString(explanation) + "\n";
@@ -210,7 +214,11 @@ void TeamcityBoostLogFormatter::test_unit_skipped(std::ostream& /*out*/, boost::
 
 #else                                                       // BOOST_VERSION >= 105900
 
-void TeamcityBoostLogFormatter::log_exception_start(std::ostream& out, const boost::unit_test::log_checkpoint_data&, const boost::execution_exception& excpt)
+void TeamcityBoostLogFormatter::log_exception_start(
+    std::ostream& out
+  , const boost::unit_test::log_checkpoint_data&
+  , const boost::execution_exception& excpt
+  )
 {
     std::string what = toString(excpt);
 
@@ -218,7 +226,11 @@ void TeamcityBoostLogFormatter::log_exception_start(std::ostream& out, const boo
     currentDetails += what + "\n";
 }
 
-void TeamcityBoostLogFormatter::test_unit_skipped(std::ostream &/*out*/, boost::unit_test::test_unit const& tu, boost::unit_test::const_string reason)
+void TeamcityBoostLogFormatter::test_unit_skipped(
+    std::ostream &/*out*/
+  , boost::unit_test::test_unit const& tu
+  , boost::unit_test::const_string reason
+  )
 {
     messages.testIgnored(tu.p_name, toString(reason), flowId);
 }
