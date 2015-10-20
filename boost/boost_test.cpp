@@ -1,6 +1,10 @@
 #define BOOST_TEST_MAIN
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_log.hpp>
+#include <boost/test/framework.hpp>
+#include <boost/version.hpp>
+
 #include <iostream>
 
 /* Suite tree tests */
@@ -96,4 +100,15 @@ BOOST_AUTO_TEST_CASE(testError)
 
 BOOST_AUTO_TEST_CASE(testNothing)
 {
+}
+
+BOOST_AUTO_TEST_CASE(skip_this_test)
+{
+    boost::unit_test::unit_test_log.test_unit_skipped(
+        boost::unit_test_framework::framework::current_test_case()
+#if BOOST_VERSION >= 105900
+      , "This test is ignored"
+#endif                                                      // BOOST_VERSION >= 105900
+      );
+    BOOST_CHECK(true);
 }
