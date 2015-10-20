@@ -45,19 +45,15 @@ const boost::unit_test::test_unit_type UNIT_TEST_CASE =
 // Formatter implementation
 std::string toString(boost::unit_test::const_string bstr)
 {
-    std::stringstream ss;
-
+    std::stringstream ss(std::ios_base::out);
     ss << bstr;
-
     return ss.str();
 }
 
 std::string toString(const boost::execution_exception& excpt)
 {
-    std::stringstream ss;
-
+    std::stringstream ss(std::ios_base::out);
     ss << excpt.what();
-
     return ss.str();
 }
 }                                                           // anonymous namespace
@@ -127,8 +123,10 @@ TeamcityBoostLogFormatter::TeamcityBoostLogFormatter()
   : flowId(getFlowIdFromEnvironment())
 {}
 
-void TeamcityBoostLogFormatter::log_start(std::ostream& /*out*/, boost::unit_test::counter_t /*test_cases_amount*/)
-{}
+void TeamcityBoostLogFormatter::log_start(std::ostream& out, boost::unit_test::counter_t /*test_cases_amount*/)
+{
+    messages.setOutput(out);
+}
 
 void TeamcityBoostLogFormatter::log_finish(std::ostream& /*out*/)
 {}
@@ -136,9 +134,9 @@ void TeamcityBoostLogFormatter::log_finish(std::ostream& /*out*/)
 void TeamcityBoostLogFormatter::log_build_info(std::ostream& /*out*/)
 {}
 
-void TeamcityBoostLogFormatter::test_unit_start(std::ostream &out, const boost::unit_test::test_unit& tu)
+void TeamcityBoostLogFormatter::test_unit_start(std::ostream& out, const boost::unit_test::test_unit& tu)
 {
-    messages.setOutput(out);
+    currentTestName = tu.p_name;
 
     if (tu.p_type == UNIT_TEST_CASE)
         messages.testStarted(tu.p_name, flowId);
@@ -148,10 +146,8 @@ void TeamcityBoostLogFormatter::test_unit_start(std::ostream &out, const boost::
     currentDetails.clear();
 }
 
-void TeamcityBoostLogFormatter::test_unit_finish(std::ostream &out, const boost::unit_test::test_unit& tu, unsigned long elapsed)
+void TeamcityBoostLogFormatter::test_unit_finish(std::ostream& out, const boost::unit_test::test_unit& tu, unsigned long elapsed)
 {
-    messages.setOutput(out);
-
     const boost::unit_test::test_results& tr = boost::unit_test::results_collector.results(tu.p_id);
     if (tu.p_type == UNIT_TEST_CASE)
     {
@@ -191,8 +187,8 @@ void TeamcityBoostLogFormatter::log_entry_value(std::ostream& out, boost::unit_t
 
 void TeamcityBoostLogFormatter::log_entry_finish(std::ostream& out)
 {
-    out << std::endl;
-    currentDetails += "\n";
+    out << '\n';
+    currentDetails += '\n';
 }
 
 #if BOOST_VERSION < 105900
@@ -203,8 +199,8 @@ void TeamcityBoostLogFormatter::log_exception(
   , boost::unit_test::const_string explanation
   )
 {
-    out << explanation << std::endl;
-    currentDetails += toString(explanation) + "\n";
+    out << explanation << '\n';
+    currentDetails += toString(explanation) + '\n';
 }
 
 void TeamcityBoostLogFormatter::test_unit_skipped(std::ostream& /*out*/, const boost::unit_test::test_unit& tu)
@@ -220,10 +216,10 @@ void TeamcityBoostLogFormatter::log_exception_start(
   , const boost::execution_exception& excpt
   )
 {
-    std::string what = toString(excpt);
+    const std::string what = toString(excpt);
 
-    out << what << std::endl;
-    currentDetails += what + "\n";
+    out << what << '\n';
+    currentDetails += what + '\n';
 }
 
 void TeamcityBoostLogFormatter::test_unit_skipped(
@@ -235,7 +231,8 @@ void TeamcityBoostLogFormatter::test_unit_skipped(
     messages.testIgnored(tu.p_name, toString(reason), flowId);
 }
 
-void TeamcityBoostLogFormatter::log_exception_finish(std::ostream& /*out*/) {}
+void TeamcityBoostLogFormatter::log_exception_finish(std::ostream& /*out*/)
+{}
 
 void TeamcityBoostLogFormatter::entry_context_start(std::ostream& out, boost::unit_test::log_level l)
 {
