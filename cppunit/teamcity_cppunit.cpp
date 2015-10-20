@@ -15,74 +15,78 @@
  * $Revision: 88625 $
 */
 
-#include <sstream>
+#include "teamcity_cppunit.h"
 
 #include "cppunit/Test.h"
 #include "cppunit/Exception.h"
 
-#include "teamcity_cppunit.h"
+#include <sstream>
 
 using namespace CPPUNIT_NS;
-using namespace std;
 
-namespace jetbrains {
-namespace teamcity {
+namespace jetbrains { namespace teamcity { namespace {
+std::string sourceLine2string(const SourceLine &sline)
+{
+    std::stringstream ss;
+
+    ss << sline.fileName() << ":" << sline.lineNumber();
+
+    return ss.str();
+}
+}                                                           // anonymous namespace
 
 TeamcityProgressListener::TeamcityProgressListener()
+  : flowid(getFlowIdFromEnvironment())
 {
-    flowid = getFlowIdFromEnvironment();
 }
 
-TeamcityProgressListener::TeamcityProgressListener(const std::string& _flowid)
+TeamcityProgressListener::TeamcityProgressListener(const std::string& id)
+  : flowid(id)
 {
-    flowid = _flowid;
 }
 
 TeamcityProgressListener::~TeamcityProgressListener()
 {}
 
-void TeamcityProgressListener::startTest(Test *test) {
+void TeamcityProgressListener::startTest(Test *test)
+{
     messages.testStarted(test->getName(), flowid);
 }
 
-static string sourceLine2string(const SourceLine &sline) {
-    stringstream ss;
-        
-    ss << sline.fileName() << ":" << sline.lineNumber();
-    
-    return ss.str();
-}
-
-void TeamcityProgressListener::addFailure(const TestFailure &failure) {
+void TeamcityProgressListener::addFailure(const TestFailure &failure)
+{
     const Exception *e = failure.thrownException();
-    
-    string details = e->message().details();
-    
-    if (e->sourceLine().isValid()) {
+
+    std::string details = e->message().details();
+
+    if (e->sourceLine().isValid())
+    {
         details.append(" at ");
         details.append(sourceLine2string(e->sourceLine()));
         details.append("\n");
     }
-    
+
     messages.testFailed(
-        failure.failedTest()->getName(),
-        e->message().shortDescription(),
-        details,
-        flowid
-    );
+        failure.failedTest()->getName()
+      , e->message().shortDescription()
+      , details
+      , flowid
+      );
 }
 
-void TeamcityProgressListener::endTest(Test *test) {
+void TeamcityProgressListener::endTest(Test *test)
+{
     messages.testFinished(test->getName(), -1, flowid);
 }
 
-void TeamcityProgressListener::startSuite(Test *test) {
+void TeamcityProgressListener::startSuite(Test *test)
+{
     messages.suiteStarted(test->getName(), flowid);
 }
 
-void TeamcityProgressListener::endSuite(Test *test) {
+void TeamcityProgressListener::endSuite(Test *test)
+{
     messages.suiteFinished(test->getName(), flowid);
 }
 
-}
-}
+}}                                                          // namespace teamcity, jetbrains

@@ -1,22 +1,29 @@
-#include <gtest/gtest.h>
 #include "teamcity_gtest.h"
+#include <gtest/gtest.h>
 
-TEST(TestCase1, SuccessfulTest1) {
+TEST(TestCase1, SuccessfulTest1)
+{
     EXPECT_EQ(1, 1);
 }
-TEST(TestCase1, MultipleFailures) {
+
+TEST(TestCase1, MultipleFailures)
+{
     EXPECT_EQ(1, 2);
     EXPECT_EQ(2, 3);
     EXPECT_EQ(3, 4);
 }
-TEST(TestCase2, SuccessfulTest2) {
+
+TEST(TestCase2, SuccessfulTest2)
+{
     EXPECT_EQ(1, 1);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     ::testing::InitGoogleTest(&argc, argv);
 
-    if (jetbrains::teamcity::underTeamcity()) {
+    if (jetbrains::teamcity::underTeamcity())
+    {
         ::testing::TestEventListeners& listeners = ::testing::UnitTest::GetInstance()->listeners();
         // Add unique flowId parameter if you want to run test processes in parallel
         // See http://confluence.jetbrains.net/display/TCD6/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-MessageFlowId

@@ -15,8 +15,7 @@
  * $Revision: 88625 $
 */
 
-#include <iostream>
-#include <stdexcept>
+#include "teamcity_cppunit.h"
 
 #include <cppunit/TestRunner.h>
 #include <cppunit/TestResult.h>
@@ -25,57 +24,67 @@
 #include <cppunit/BriefTestProgressListener.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
-#include "teamcity_cppunit.h"
+#include <iostream>
+#include <stdexcept>
 
 using namespace CPPUNIT_NS;
-using namespace std;
 
-class MyTest : public TestCase {
+class MyTest : public TestCase
+{
     CPPUNIT_TEST_SUITE(MyTest);
-    CPPUNIT_TEST(testHelloWorld);
-    CPPUNIT_TEST(testException);
-    CPPUNIT_TEST(testCerr);
-    CPPUNIT_TEST(testAssert);
-    CPPUNIT_TEST(testAssertThrow);
-    CPPUNIT_TEST(testAssertEqual);
-    CPPUNIT_TEST(testNothing);
+        CPPUNIT_TEST(testHelloWorld);
+        CPPUNIT_TEST(testException);
+        CPPUNIT_TEST(testCerr);
+        CPPUNIT_TEST(testAssert);
+        CPPUNIT_TEST(testAssertThrow);
+        CPPUNIT_TEST(testAssertEqual);
+        CPPUNIT_TEST(testNothing);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void testHelloWorld() {
-        cout << "Hello, cout" << endl;
+    void testHelloWorld()
+    {
+        std::cout << "Hello, cout" << std::endl;
     }
 
-    void testCerr() {
-        cerr << "Hello, cerr!" << endl;
+    void testCerr()
+    {
+        std::cerr << "Hello, cerr!" << std::endl;
     }
 
-    void testException() {
+    void testException()
+    {
         throwRuntimeException();
     }
-    
-    void testAssertEqual() {
+
+    void testAssertEqual()
+    {
         CPPUNIT_ASSERT_EQUAL(2, 1);
     }
 
     void testNothing() {}
-    
-    void testAssertThrow() {
-        CPPUNIT_ASSERT_THROW(throwRuntimeException(), logic_error);
+
+    void testAssertThrow()
+    {
+        CPPUNIT_ASSERT_THROW(throwRuntimeException(), std::logic_error);
     }
-    
-    void testAssert() {
+
+    void testAssert()
+    {
         CPPUNIT_ASSERT(false);
     }
-    
-    void throwRuntimeException() {
-        throw runtime_error("runtime exception text");
+
+    void throwRuntimeException()
+    {
+        throw std::runtime_error("runtime exception text");
     }
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MyTest);
 
-static void run() {
+namespace {
+void run()
+{
     CPPUNIT_NS::TestResult controller;
 
     jetbrains::teamcity::TeamcityProgressListener tc;
@@ -85,8 +94,9 @@ static void run() {
     runner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
     runner.run(controller);
 }
+}                                                           // anonymous namespace
 
-int main(int /*argc*/, char ** /*argv*/) {
+int main(int /*argc*/, char ** /*argv*/)
+{
     run();
-    return 0;
 }

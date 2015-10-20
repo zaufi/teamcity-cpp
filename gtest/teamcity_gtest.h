@@ -14,18 +14,17 @@
  *
  */
 
-#ifndef H_TEAMCITY_GTEST
-#define H_TEAMCITY_GTEST
+#pragma once
+
+#include "teamcity_messages.h"
 
 #include <gtest/gtest.h>
 #include <string>
 
-#include "teamcity_messages.h"
+namespace jetbrains { namespace teamcity {
 
-namespace jetbrains {
-namespace teamcity {
-
-class TeamcityGoogleTestEventListener: public ::testing::EmptyTestEventListener {
+class TeamcityGoogleTestEventListener : public ::testing::EmptyTestEventListener
+{
 public:
     TeamcityGoogleTestEventListener(const std::string& flowid);
     TeamcityGoogleTestEventListener();
@@ -45,10 +44,7 @@ private:
 
     // Prevent copying.
     TeamcityGoogleTestEventListener(const TeamcityGoogleTestEventListener&);
-    void operator =(const TeamcityGoogleTestEventListener&);
+    void operator=(const TeamcityGoogleTestEventListener&);
 };
 
-}
-}
-
-#endif /* H_TEAMCITY_GTEST */
+}}                                                          // namespace teamcity, jetbrains

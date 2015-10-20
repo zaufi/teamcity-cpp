@@ -13,33 +13,44 @@
  * limitations under the License.
  *
  */
-#include <stdexcept>
+
+#include "teamcity_gtest.h"
 
 #include <gtest/gtest.h>
-#include "teamcity_gtest.h"
+#include <stdexcept>
 
 void throwRuntimeException();
 
-TEST(TestCase1, SuccessfulTest1) {
+TEST(TestCase1, SuccessfulTest1)
+{
     EXPECT_EQ(1, 1);
 }
-TEST(TestCase1, MultipleFailures) {
+
+TEST(TestCase1, MultipleFailures)
+{
     EXPECT_EQ(1, 2);
     EXPECT_EQ(2, 3);
     EXPECT_EQ(3, 4);
 }
-TEST(TestCase2, SuccessfulTest2) {
+
+TEST(TestCase2, SuccessfulTest2)
+{
     EXPECT_EQ(1, 1);
 }
-void throwRuntimeException() {
+
+void throwRuntimeException()
+{
     throw std::runtime_error("runtime exception text");
 }
-TEST(TestCase2, FailedThrow) {
+
+TEST(TestCase2, FailedThrow)
+{
     ASSERT_THROW(throwRuntimeException(), std::logic_error);
 }
 
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     ::testing::InitGoogleTest(&argc, argv);
 
     ::testing::TestEventListeners& listeners = ::testing::UnitTest::GetInstance()->listeners();

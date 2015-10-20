@@ -16,51 +16,56 @@
 
 #include "teamcity_gtest.h"
 
-namespace jetbrains {
-namespace teamcity {
+namespace jetbrains { namespace teamcity {
 
 using namespace testing;
 
-TeamcityGoogleTestEventListener::TeamcityGoogleTestEventListener() {
-    flowid = getFlowIdFromEnvironment();
+TeamcityGoogleTestEventListener::TeamcityGoogleTestEventListener()
+  : flowid(getFlowIdFromEnvironment())
+{
 }
 
-TeamcityGoogleTestEventListener::TeamcityGoogleTestEventListener(const std::string& flowid_)
-    : flowid(flowid_) {
+TeamcityGoogleTestEventListener::TeamcityGoogleTestEventListener(const std::string& id)
+  : flowid(id)
+{
 }
 
 // Fired before the test case starts.
-void TeamcityGoogleTestEventListener::OnTestCaseStart(const TestCase& test_case) {
+void TeamcityGoogleTestEventListener::OnTestCaseStart(const TestCase& test_case)
+{
     messages.suiteStarted(test_case.name(), flowid);
 }
 
 // Fired before the test starts.
-void TeamcityGoogleTestEventListener::OnTestStart(const TestInfo& test_info) {
+void TeamcityGoogleTestEventListener::OnTestStart(const TestInfo& test_info)
+{
     messages.testStarted(test_info.name(), flowid);
 }
 
 // Fired after the test ends.
-void TeamcityGoogleTestEventListener::OnTestEnd(const TestInfo& test_info) {
+void TeamcityGoogleTestEventListener::OnTestEnd(const TestInfo& test_info)
+{
     const TestResult* result = test_info.result();
-    if (result->Failed()) {
+    if (result->Failed())
+    {
         std::string message;
         std::string details;
-        for (int i = 0; i < result->total_part_count(); ++i) {
+        for (int i = 0; i < result->total_part_count(); ++i)
+        {
             const TestPartResult& partResult = result->GetTestPartResult(i);
-            if (partResult.passed()) {
+            if (partResult.passed())
                 continue;
-            }
 
-            if (message.empty()) {
+            if (message.empty())
                 message = partResult.summary();
-            }
 
-            if (!details.empty()) {
+            if (!details.empty())
                 details.append("\n");
-            }
+
             details.append(partResult.message());
 
-            if (partResult.file_name() && partResult.line_number() >= 0) {
+            if (partResult.file_name() && partResult.line_number() >= 0)
+            {
                 std::stringstream ss;
                 ss << "\n at " << partResult.file_name() << ":" << partResult.line_number();
                 details.append(ss.str());
@@ -68,19 +73,19 @@ void TeamcityGoogleTestEventListener::OnTestEnd(const TestInfo& test_info) {
         }
 
         messages.testFailed(
-            test_info.name(),
-            !message.empty() ? message : "failed",
-            details,
-            flowid
-        );
+            test_info.name()
+          , !message.empty() ? message : "failed"
+          , details
+          , flowid
+          );
     }
     messages.testFinished(test_info.name(), static_cast<int>(result->elapsed_time()), flowid);
 }
 
 // Fired after the test case ends.
-void TeamcityGoogleTestEventListener::OnTestCaseEnd(const TestCase& test_case) {
+void TeamcityGoogleTestEventListener::OnTestCaseEnd(const TestCase& test_case)
+{
     messages.suiteFinished(test_case.name(), flowid);
 }
 
-}
-}
+}}                                                          // namespace teamcity, jetbrains

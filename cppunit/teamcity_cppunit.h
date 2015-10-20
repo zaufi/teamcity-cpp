@@ -15,23 +15,22 @@
  * $Revision: 88625 $
 */
 
-#ifndef H_TEAMCITY_CPPUNIT
-#define H_TEAMCITY_CPPUNIT
+#pragma once
+
+#include "teamcity_messages.h"
 
 #include <cppunit/TestFailure.h>
 #include <cppunit/TestListener.h>
 #include <string>
 
-#include "teamcity_messages.h"
+namespace jetbrains { namespace teamcity {
 
-namespace jetbrains {
-namespace teamcity {
-
-class TeamcityProgressListener: public CPPUNIT_NS::TestListener {
+class TeamcityProgressListener : public CPPUNIT_NS::TestListener
+{
     TeamcityMessages messages;
-    
+
 public:
-    TeamcityProgressListener(const std::string& _flowid);
+    TeamcityProgressListener(const std::string& flowid);
     TeamcityProgressListener();
     ~TeamcityProgressListener();
 
@@ -40,18 +39,15 @@ public:
     void endTest(CPPUNIT_NS::Test *test);
     void startSuite(CPPUNIT_NS::Test *test);
     void endSuite(CPPUNIT_NS::Test *test);
-    
+
 private:
     std::string flowid;
 
-    // Prevents the use of the copy constructor.
+    /// Prevents the use of the copy constructor.
     TeamcityProgressListener(const TeamcityProgressListener &copy);
 
-    // Prevents the use of the copy operator.
-    void operator =(const TeamcityProgressListener &copy);
+    /// Prevents the use of the copy operator.
+    void operator=(const TeamcityProgressListener &copy);
 };
 
-}
-}
-
-#endif /* H_TEAMCITY_CPPUNIT */
+}}                                                          // namespace teamcity, jetbrains

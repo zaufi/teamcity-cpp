@@ -20,19 +20,19 @@ Hello, cout
 
 ##teamcity[testStarted name='MyTest::testAssert' flowId='myFlowId']
 
-##teamcity[testFailed name='MyTest::testAssert' message='assertion failed' details='- Expression: false|n at cppunit/cppunit_test.cpp:68|n' flowId='myFlowId']
+##teamcity[testFailed name='MyTest::testAssert' message='assertion failed' details='- Expression: false|n at cppunit/cppunit_test.cpp:74|n' flowId='myFlowId']
 
 ##teamcity[testFinished name='MyTest::testAssert' flowId='myFlowId']
 
 ##teamcity[testStarted name='MyTest::testAssertThrow' flowId='myFlowId']
 
-##teamcity[testFailed name='MyTest::testAssertThrow' message='expected exception not thrown' details='- Expected: logic_error|n- Actual  : std::runtime_error|n- What()  : runtime exception text|n at cppunit/cppunit_test.cpp:64|n' flowId='myFlowId']
+##teamcity[testFailed name='MyTest::testAssertThrow' message='expected exception not thrown' details='- Expected: std::logic_error|n- Actual  : std::runtime_error|n- What()  : runtime exception text|n at cppunit/cppunit_test.cpp:69|n' flowId='myFlowId']
 
 ##teamcity[testFinished name='MyTest::testAssertThrow' flowId='myFlowId']
 
 ##teamcity[testStarted name='MyTest::testAssertEqual' flowId='myFlowId']
 
-##teamcity[testFailed name='MyTest::testAssertEqual' message='equality assertion failed' details='- Expected: 2|n- Actual  : 1|n at cppunit/cppunit_test.cpp:58|n' flowId='myFlowId']
+##teamcity[testFailed name='MyTest::testAssertEqual' message='equality assertion failed' details='- Expected: 2|n- Actual  : 1|n at cppunit/cppunit_test.cpp:62|n' flowId='myFlowId']
 
 ##teamcity[testFinished name='MyTest::testAssertEqual' flowId='myFlowId']
 

@@ -15,8 +15,7 @@
  * $Revision: 88625 $
  */
 
-#ifndef H_TEAMCITY_MESSAGES
-#define H_TEAMCITY_MESSAGES
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -56,5 +55,3 @@ public:
 };
 
 }}                                                          // namespace teamcity, jetbrains
-
-#endif /* H_TEAMCITY_MESSAGES */
