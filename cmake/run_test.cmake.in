@@ -1,18 +1,18 @@
+set(_rtr_expected_output "@_rtr_expected_output@")
+set(_rtr_expected_error "@_rtr_expected_error@")
+set(_rtr_flowid_expected_output "@_rtr_flowid_expected_output@")
+set(_rtr_flowid_expected_error "@_rtr_flowid_expected_error@")
+
 if(PRETEND_TEAMCITY)
     set(ENV{TEAMCITY_PROCESS_FLOW_ID} myFlowId)
     set(ENV{TEAMCITY_PROJECT_NAME} teamcity-cpp)
     set(_output_flavour ".flowid")
-    set(_expected_output "@_rtr_flowid_expected_output@")
-    set(_expected_error "@_rtr_flowid_expected_error@")
+    set(_expected_output "${_rtr_flowid_expected_output}")
+    set(_expected_error "${_rtr_flowid_expected_error}")
 else()
-    set(_expected_output "@_rtr_expected_output@")
-    set(_expected_error "@_rtr_expected_error@")
+    set(_expected_output "${_rtr_expected_output}")
+    set(_expected_error "${_rtr_expected_error}")
 endif()
-
-set(_rtr_expected_output "@_rtr_expected_output@")
-set(_rtr_expected_error "@_rtr_expected_error")
-set(_rtr_flowid_expected_output "@_rtr_flowid_expected_output@")
-set(_rtr_flowid_expected_error "@_rtr_flowid_expected_error")
 
 execute_process(
     COMMAND "${CMAKE_CURRENT_LIST_DIR}/@_rtr_TARGET@"
@@ -28,18 +28,21 @@ foreach(kind "output" "error")
     string(REGEX REPLACE "duration='[0-9]+'" "duration='0'" _out "${_out}")
     file(WRITE "${file_prefix}" "${_out}")
 
-    execute_process(
-        COMMAND "@DIFF_EXECUTABLE@" -Nru "${_expected_${kind}}" "${file_prefix}"
-        RESULT_VARIABLE _diff_exit_code
-        OUTPUT_FILE "${file_prefix}.diff"
-      )
-
-    file(READ "${file_prefix}.diff" _diff_output)
-    string(LENGTH "${_diff_output}" _diff_output_len)
-
-    if(${_diff_output_len} EQUAL 0)
-        file(REMOVE "${file_prefix}.diff")
+    if(UPDATE_EXPECTATIONS)
+        message(STATUS "Moving '${file_prefix}' -> '${_expected_${kind}}'")
+        file(RENAME "${file_prefix}" "${_expected_${kind}}")
     else()
-        message(FATAL_ERROR "Standard ${kind} comparison failed: ${file_prefix}, diff:\n${_diff_output}")
+        execute_process(
+            COMMAND "@DIFF_EXECUTABLE@" -Nru "${_expected_${kind}}" "${file_prefix}"
+            RESULT_VARIABLE _diff_exit_code
+            OUTPUT_FILE "${file_prefix}.diff"
+          )
+
+        if(${_diff_exit_code} EQUAL 0)
+            file(REMOVE "${file_prefix}.diff")
+        else()
+            file(READ "${file_prefix}.diff" _diff_output)
+            message(FATAL_ERROR "Standard ${kind} comparison failed: ${file_prefix}, diff:\n${_diff_output}")
+        endif()
     endif()
 endforeach()
