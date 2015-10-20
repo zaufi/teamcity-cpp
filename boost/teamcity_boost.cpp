@@ -127,13 +127,13 @@ TeamcityBoostLogFormatter::TeamcityBoostLogFormatter()
   : flowId(getFlowIdFromEnvironment())
 {}
 
-void TeamcityBoostLogFormatter::log_start(std::ostream &/*out*/, boost::unit_test::counter_t /*test_cases_amount*/)
+void TeamcityBoostLogFormatter::log_start(std::ostream& /*out*/, boost::unit_test::counter_t /*test_cases_amount*/)
 {}
 
-void TeamcityBoostLogFormatter::log_finish(std::ostream &/*out*/)
+void TeamcityBoostLogFormatter::log_finish(std::ostream& /*out*/)
 {}
 
-void TeamcityBoostLogFormatter::log_build_info(std::ostream &/*out*/)
+void TeamcityBoostLogFormatter::log_build_info(std::ostream& /*out*/)
 {}
 
 void TeamcityBoostLogFormatter::test_unit_start(std::ostream &out, const boost::unit_test::test_unit& tu)
@@ -207,7 +207,7 @@ void TeamcityBoostLogFormatter::log_exception(
     currentDetails += toString(explanation) + "\n";
 }
 
-void TeamcityBoostLogFormatter::test_unit_skipped(std::ostream& /*out*/, boost::unit_test::test_unit const& tu)
+void TeamcityBoostLogFormatter::test_unit_skipped(std::ostream& /*out*/, const boost::unit_test::test_unit& tu)
 {
     messages.testIgnored(tu.p_name, "test ignored", flowId);
 }
@@ -227,15 +227,15 @@ void TeamcityBoostLogFormatter::log_exception_start(
 }
 
 void TeamcityBoostLogFormatter::test_unit_skipped(
-    std::ostream &/*out*/
-  , boost::unit_test::test_unit const& tu
+    std::ostream& /*out*/
+  , const boost::unit_test::test_unit& tu
   , boost::unit_test::const_string reason
   )
 {
     messages.testIgnored(tu.p_name, toString(reason), flowId);
 }
 
-void TeamcityBoostLogFormatter::log_exception_finish(std::ostream &/*out*/) {}
+void TeamcityBoostLogFormatter::log_exception_finish(std::ostream& /*out*/) {}
 
 void TeamcityBoostLogFormatter::entry_context_start(std::ostream& out, boost::unit_test::log_level l)
 {
