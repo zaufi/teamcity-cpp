@@ -32,8 +32,8 @@
 #include <sstream>
 
 namespace jetbrains { namespace teamcity { namespace {
-const std::string ASSERT_CTX = "Assertion occurred in a following context:";
-const std::string FAILURE_CTX = "Assertion occurred in a following context:";
+const std::string ASSERT_CTX = "Assertion has occurred in a following context:";
+const std::string FAILURE_CTX = "Failure has occurred in a following context:";
 const boost::unit_test::test_unit_type UNIT_TEST_CASE =
 #if BOOST_VERSION < 105900
     boost::unit_test::tut_case
