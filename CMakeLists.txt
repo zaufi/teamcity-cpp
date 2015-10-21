@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 set(teamcity_cpp_version 1.5)
 
 if(CMAKE_VERSION VERSION_LESS 3.0)
-    project(teamcity-cpp)
+    project(teamcity-cpp LANGUAGES C CXX)
     # Old signature do not support VERSION, so set it manually
     set(PROJECT_VERSION ${teamcity_cpp_version})
 else()
