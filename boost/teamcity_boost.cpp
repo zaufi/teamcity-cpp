@@ -136,7 +136,9 @@ void TeamcityBoostLogFormatter::log_build_info(std::ostream& /*out*/)
 
 void TeamcityBoostLogFormatter::test_unit_start(std::ostream& out, const boost::unit_test::test_unit& tu)
 {
+#if BOOST_VERSION >= 105900
     currentTestName = tu.p_name;
+#endif                                                      // BOOST_VERSION >= 105900
 
     if (tu.p_type == UNIT_TEST_CASE)
         messages.testStarted(tu.p_name, flowId);

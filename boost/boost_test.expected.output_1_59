@@ -1,12 +1,16 @@
-Running 14 test cases...
-boost/boost_test.cpp(15): error: in "my_suite1/my_test1": check 2 == 1 has failed
-boost/boost_test.cpp(22): error: in "my_suite1/my_test2": check i == 2 has failed [0 != 2]
-boost/boost_test.cpp(41): error: in "my_suite2/my_test4": check i == 1 has failed [0 != 1]
-boost/boost_test.cpp(50): error: in "my_suite2/internal_suite/my_test5": check i == 1 has failed [0 != 1]
+Running 22 test cases...
+boost/boost_test.cpp(21): error: in "my_suite1/my_test1": check 2 == 1 has failed
+boost/boost_test.cpp(28): error: in "my_suite1/my_test2": check i == 2 has failed [0 != 2]
+boost/boost_test.cpp(47): error: in "my_suite2/my_test4": check i == 1 has failed [0 != 1]
+boost/boost_test.cpp(56): error: in "my_suite2/internal_suite/my_test5": check i == 1 has failed [0 != 1]
 Hello from cout
 unknown location(0): fatal error: in "testException": std::runtime_error: runtime exception text
-boost/boost_test.cpp(76): last checkpoint: "testException" entry.
+boost/boost_test.cpp(82): last checkpoint: "testException" entry.
 unknown location(0): fatal error: in "testAssertExceptionFail": std::runtime_error: runtime exception text
-boost/boost_test.cpp(88): last checkpoint
-boost/boost_test.cpp(93): fatal error: in "testFatal": bfail
-boost/boost_test.cpp(98): error: in "testError": berror
+boost/boost_test.cpp(94): last checkpoint
+boost/boost_test.cpp(99): fatal error: in "testFatal": bfail
+boost/boost_test.cpp(104): error: in "testError": berror
+boost/boost_test.cpp(126): error: in "test_case_arity1": check (var <= 4 && var >= 1) has failed
+Failure occurred in a following context:
+    var = 0; 
+boost/boost_test.cpp(136): error: in "dependencySkippedTest": check 1 != 1 has failed [1 == 1]

@@ -1,9 +1,15 @@
 #define BOOST_TEST_MAIN
 
+#include <boost/version.hpp>
+/// \attention Some Boost UTF headers are *NOT self-contained*,
+/// so be aware about implicit heder dependencies...
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_log.hpp>
 #include <boost/test/framework.hpp>
-#include <boost/version.hpp>
+#if BOOST_VERSION >= 105900
+# include <boost/test/data/test_case.hpp>
+# include <boost/test/data/monomorphic.hpp>
+#endif                                                      // BOOST_VERSION >= 105900
 
 #include <iostream>
 
@@ -47,7 +53,7 @@ BOOST_AUTO_TEST_CASE(my_test5)
 {
     int i = 0;
 
-    BOOST_CHECK_EQUAL( i, 1 );
+    BOOST_CHECK_EQUAL(i, 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END()                                 // internal_suite
@@ -100,6 +106,7 @@ BOOST_AUTO_TEST_CASE(testError)
 
 BOOST_AUTO_TEST_CASE(testNothing)
 {
+    BOOST_TEST_MESSAGE("This test doesn't check anything");
 }
 
 BOOST_AUTO_TEST_CASE(skip_this_test)
@@ -112,3 +119,25 @@ BOOST_AUTO_TEST_CASE(skip_this_test)
       );
     BOOST_CHECK(true);
 }
+
+#if BOOST_VERSION >= 105900
+BOOST_DATA_TEST_CASE(test_case_arity1, boost::unit_test_framework::data::xrange(5), var)
+{
+    BOOST_TEST((var <= 4 && var >= 1));
+}
+
+BOOST_AUTO_TEST_CASE(dependencyFailTest, *boost::unit_test::depends_on("my_suite1/my_test1"))
+{
+    BOOST_FAIL("dependency failed");
+}
+
+BOOST_AUTO_TEST_CASE(dependencySkippedTest, *boost::unit_test::depends_on("skip_this_test"))
+{
+    BOOST_TEST(1 != 1);
+}
+
+BOOST_AUTO_TEST_CASE(dependencyOkTest, *boost::unit_test::depends_on("testNothing"))
+{
+    BOOST_TEST(true);
+}
+#endif                                                      // BOOST_VERSION >= 105900

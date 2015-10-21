@@ -13,6 +13,7 @@ target_include_directories(
 target_compile_definitions(
     boost_test PRIVATE
     -DBOOST_TEST_DYN_LINK
+    -DBOOST_PP_VARIADICS=1
   )
 
 target_link_libraries(
