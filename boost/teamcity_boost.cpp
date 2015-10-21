@@ -66,7 +66,6 @@ class TeamcityBoostLogFormatter : public boost::unit_test::unit_test_log_formatt
     std::string flowId;
 #if BOOST_VERSION >= 105900
     std::string currentContextDetails;
-    std::string currentTestName;
 #endif                                                      // BOOST_VERSION >= 105900
 
 public:
@@ -136,10 +135,6 @@ void TeamcityBoostLogFormatter::log_build_info(std::ostream& /*out*/)
 
 void TeamcityBoostLogFormatter::test_unit_start(std::ostream& out, const boost::unit_test::test_unit& tu)
 {
-#if BOOST_VERSION >= 105900
-    currentTestName = tu.p_name;
-#endif                                                      // BOOST_VERSION >= 105900
-
     if (tu.p_type == UNIT_TEST_CASE)
         messages.testStarted(tu.p_name, flowId);
     else
@@ -252,7 +247,12 @@ void TeamcityBoostLogFormatter::log_entry_context(std::ostream& out, boost::unit
 void TeamcityBoostLogFormatter::entry_context_finish(std::ostream& out)
 {
     out.flush();
-    messages.testOutput(currentTestName, currentContextDetails, flowId, TeamcityMessages::StdErr);
+    messages.testOutput(
+        boost::unit_test_framework::framework::current_test_case().full_name()
+      , currentContextDetails
+      , flowId
+      , TeamcityMessages::StdErr
+      );
 }
 #endif                                                      // BOOST_VERSION >= 105900
 }}                                                          // namespace teamcity, jetbrains
