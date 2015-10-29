@@ -17,8 +17,8 @@
 
 #pragma once
 
-#include <iostream>
 #include <string>
+#include <iosfwd>
 
 namespace jetbrains { namespace teamcity {
 
@@ -29,17 +29,13 @@ class TeamcityMessages
 {
     std::ostream* m_out;
 
-protected:
-    std::string escape(std::string s);
-    void writeProperty(const char* name, std::string value, bool ifNonEmpty = false);
-
 public:
     static const bool StdErr = true;
     static const bool StdOut = false;
 
     TeamcityMessages();
 
-    void setOutput(std::ostream &);
+    void setOutput(std::ostream&);
 
     void suiteStarted(std::string name, std::string flowid = std::string());
     void suiteFinished(std::string name, std::string flowid = std::string());
