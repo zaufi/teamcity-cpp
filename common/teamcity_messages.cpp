@@ -25,26 +25,26 @@ namespace jetbrains { namespace teamcity {
 std::string getFlowIdFromEnvironment()
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    char *flowId = 0;
+    char* flowId = 0;
     size_t sz = 0;
     std::string result;
-    if (!_dupenv_s(&flowId, &sz,"TEAMCITY_PROCESS_FLOW_ID"))
+    if (!_dupenv_s(&flowId, &sz, "TEAMCITY_PROCESS_FLOW_ID"))
     {
-        result = flowId != 0 ? flowId : "";
+        result = flowId != 0 ? flowId : std::string();
         free(flowId);
     }
 
     return result;
 #else
     const char *flowId = getenv("TEAMCITY_PROCESS_FLOW_ID");
-    return flowId == 0 ? "" : flowId;
+    return flowId == 0 ? std::string() : flowId;
 #endif
 }
 
 bool underTeamcity()
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-    char *teamCityProjectName = 0;
+    char* teamCityProjectName = 0;
     size_t sz = 0;
     bool result = false;
     if (!_dupenv_s(&teamCityProjectName, &sz, "TEAMCITY_PROJECT_NAME"))
@@ -98,21 +98,21 @@ void TeamcityMessages::openMsg(const std::string& name)
 
 void TeamcityMessages::closeMsg()
 {
-    *m_out << "]";
+    *m_out << ']';
     // endl for http://jetbrains.net/tracker/issue/TW-4412
     *m_out << std::endl;
 }
 
 void TeamcityMessages::writeProperty(std::string name, std::string value)
 {
-    *m_out << " " << name << "='" << escape(value) << "'";
+    *m_out << ' ' << name << "='" << escape(value) << '\'';
 }
 
 void TeamcityMessages::suiteStarted(std::string name, std::string flowid)
 {
     openMsg("testSuiteStarted");
     writeProperty("name", name);
-    if(flowid.length() > 0)
+    if (!flowid.empty())
     {
         writeProperty("flowId", flowid);
     }
@@ -124,10 +124,8 @@ void TeamcityMessages::suiteFinished(std::string name, std::string flowid)
 {
     openMsg("testSuiteFinished");
     writeProperty("name", name);
-    if (flowid.length() > 0)
-    {
+    if (!flowid.empty())
         writeProperty("flowId", flowid);
-    }
 
     closeMsg();
 }
@@ -136,15 +134,11 @@ void TeamcityMessages::testStarted(std::string name, std::string flowid, bool ca
 {
     openMsg("testStarted");
     writeProperty("name", name);
-    if (flowid.length() > 0)
-    {
+    if (!flowid.empty())
         writeProperty("flowId", flowid);
-    }
 
     if (captureStandardOutput)
-    {
-        writeProperty("captureStandardOutput", "true"); // false by default
-    }
+        writeProperty("captureStandardOutput", "true");     // false by default
 
     closeMsg();
 }
@@ -155,10 +149,8 @@ void TeamcityMessages::testFinished(std::string name, int durationMs, std::strin
 
     writeProperty("name", name);
 
-    if (flowid.length() > 0)
-    {
+    if (!flowid.empty())
         writeProperty("flowId", flowid);
-    }
 
     if (durationMs >= 0)
     {
@@ -176,10 +168,9 @@ void TeamcityMessages::testFailed(std::string name, std::string message, std::st
     writeProperty("name", name);
     writeProperty("message", message);
     writeProperty("details", details);
-    if (flowid.length() > 0)
-    {
+
+    if (!flowid.empty())
         writeProperty("flowId", flowid);
-    }
 
     closeMsg();
 }
@@ -189,10 +180,9 @@ void TeamcityMessages::testIgnored(std::string name, std::string message, std::s
     openMsg("testIgnored");
     writeProperty("name", name);
     writeProperty("message", message);
-    if (flowid.length() > 0)
-    {
+
+    if (!flowid.empty())
         writeProperty("flowId", flowid);
-    }
 
     closeMsg();
 }
@@ -202,10 +192,9 @@ void TeamcityMessages::testOutput(std::string name, std::string output, std::str
     openMsg(isStdError ? "testStdErr" : "testStdOut");
     writeProperty("name", name);
     writeProperty("out", output);
-    if (flowid.length() > 0)
-    {
+
+    if (!flowid.empty())
         writeProperty("flowId", flowid);
-    }
 
     closeMsg();
 }
