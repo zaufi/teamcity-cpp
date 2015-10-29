@@ -20,7 +20,27 @@
 #include <cstdlib>
 #include <sstream>
 
-namespace jetbrains { namespace teamcity {
+namespace jetbrains { namespace teamcity { namespace {
+/// Use RAII to write message open/close markers
+class RaiiMessage
+{
+public:
+    RaiiMessage(const char* const name, std::ostream* const out)
+      : m_out(out)
+    {
+        // endl for http://jetbrains.net/tracker/issue/TW-4412
+        *m_out << '\n' << "##teamcity[" << name;
+    }
+    ~RaiiMessage()
+    {
+        // endl for http://jetbrains.net/tracker/issue/TW-4412
+        *m_out << "]\n";
+    }
+
+private:
+    std::ostream* m_out;
+};
+}                                                           // anonymous namespace
 
 std::string getFlowIdFromEnvironment()
 {
@@ -68,6 +88,7 @@ void TeamcityMessages::setOutput(std::ostream& out)
     m_out = &out;
 }
 
+/// \todo Copying char-by-char is ineffective!
 std::string TeamcityMessages::escape(std::string s)
 {
     std::string result;
@@ -90,113 +111,76 @@ std::string TeamcityMessages::escape(std::string s)
     return result;
 }
 
-void TeamcityMessages::openMsg(const std::string& name)
+void TeamcityMessages::writeProperty(const char* const name, std::string value, const bool ifNonEmpty)
 {
-    // endl for http://jetbrains.net/tracker/issue/TW-4412
-    *m_out << std::endl << "##teamcity[" << name;
-}
-
-void TeamcityMessages::closeMsg()
-{
-    *m_out << ']';
-    // endl for http://jetbrains.net/tracker/issue/TW-4412
-    *m_out << std::endl;
-}
-
-void TeamcityMessages::writeProperty(std::string name, std::string value)
-{
-    *m_out << ' ' << name << "='" << escape(value) << '\'';
+    if (ifNonEmpty || !value.empty())
+        *m_out << ' ' << name << "='" << escape(value) << '\'';
 }
 
 void TeamcityMessages::suiteStarted(std::string name, std::string flowid)
 {
-    openMsg("testSuiteStarted");
+    RaiiMessage msg("testSuiteStarted", m_out);
     writeProperty("name", name);
-    if (!flowid.empty())
-    {
-        writeProperty("flowId", flowid);
-    }
-
-    closeMsg();
+    writeProperty("flowId", flowid);
 }
 
 void TeamcityMessages::suiteFinished(std::string name, std::string flowid)
 {
-    openMsg("testSuiteFinished");
+    RaiiMessage msg("testSuiteFinished", m_out);
     writeProperty("name", name);
-    if (!flowid.empty())
-        writeProperty("flowId", flowid);
-
-    closeMsg();
+    writeProperty("flowId", flowid);
 }
 
-void TeamcityMessages::testStarted(std::string name, std::string flowid, bool captureStandardOutput)
+void TeamcityMessages::testStarted(std::string name, std::string flowid, const bool captureStandardOutput)
 {
-    openMsg("testStarted");
+    RaiiMessage msg("testStarted", m_out);
     writeProperty("name", name);
-    if (!flowid.empty())
-        writeProperty("flowId", flowid);
+    writeProperty("flowId", flowid);
 
     if (captureStandardOutput)
         writeProperty("captureStandardOutput", "true");     // false by default
-
-    closeMsg();
 }
 
-void TeamcityMessages::testFinished(std::string name, int durationMs, std::string flowid)
+void TeamcityMessages::testFinished(std::string name, const int durationMs, std::string flowid)
 {
-    openMsg("testFinished");
+    RaiiMessage msg("testFinished", m_out);
 
     writeProperty("name", name);
-
-    if (!flowid.empty())
-        writeProperty("flowId", flowid);
+    writeProperty("flowId", flowid);
 
     if (durationMs >= 0)
     {
+        /// \bug W/ some locales it is possible to get a number w/ a number separator(s)!
+        /// \todo Make a test for that!
         std::stringstream out(std::ios_base::out);
         out << durationMs;
         writeProperty("duration", out.str());
     }
-
-    closeMsg();
 }
 
 void TeamcityMessages::testFailed(std::string name, std::string message, std::string details, std::string flowid)
 {
-    openMsg("testFailed");
+    RaiiMessage msg("testFailed", m_out);
     writeProperty("name", name);
     writeProperty("message", message);
     writeProperty("details", details);
-
-    if (!flowid.empty())
-        writeProperty("flowId", flowid);
-
-    closeMsg();
+    writeProperty("flowId", flowid);
 }
 
 void TeamcityMessages::testIgnored(std::string name, std::string message, std::string flowid)
 {
-    openMsg("testIgnored");
+    RaiiMessage msg("testIgnored", m_out);
     writeProperty("name", name);
     writeProperty("message", message);
-
-    if (!flowid.empty())
-        writeProperty("flowId", flowid);
-
-    closeMsg();
+    writeProperty("flowId", flowid);
 }
 
 void TeamcityMessages::testOutput(std::string name, std::string output, std::string flowid, bool isStdError)
 {
-    openMsg(isStdError ? "testStdErr" : "testStdOut");
+    RaiiMessage msg(isStdError ? "testStdErr" : "testStdOut", m_out);
     writeProperty("name", name);
     writeProperty("out", output);
-
-    if (!flowid.empty())
-        writeProperty("flowId", flowid);
-
-    closeMsg();
+    writeProperty("flowId", flowid);
 }
 
 }}                                                          // namespace teamcity, jetbrains

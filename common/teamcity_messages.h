@@ -31,10 +31,7 @@ class TeamcityMessages
 
 protected:
     std::string escape(std::string s);
-
-    void openMsg(const std::string &name);
-    void writeProperty(std::string name, std::string value);
-    void closeMsg();
+    void writeProperty(const char* name, std::string value, bool ifNonEmpty = false);
 
 public:
     static const bool StdErr = true;
@@ -44,12 +41,12 @@ public:
 
     void setOutput(std::ostream &);
 
-    void suiteStarted(std::string name, std::string flowid =  std::string());
-    void suiteFinished(std::string name, std::string flowid =  std::string());
+    void suiteStarted(std::string name, std::string flowid = std::string());
+    void suiteFinished(std::string name, std::string flowid = std::string());
 
-    void testStarted(std::string name, std::string flowid =  std::string(), bool captureStandardOutput = false);
-    void testFailed(std::string name, std::string message, std::string details, std::string flowid =  std::string());
-    void testIgnored(std::string name, std::string message, std::string flowid =  std::string());
+    void testStarted(std::string name, std::string flowid = std::string(), bool captureStandardOutput = false);
+    void testFailed(std::string name, std::string message, std::string details, std::string flowid = std::string());
+    void testIgnored(std::string name, std::string message, std::string flowid = std::string());
     void testOutput(std::string name, std::string output, std::string flowid, bool isStdErr = StdOut);
     void testFinished(std::string name, int durationMs = -1, std::string flowid = std::string());
 };
