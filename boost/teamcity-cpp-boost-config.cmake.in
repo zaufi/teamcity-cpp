@@ -1,0 +1,23 @@
+# - Find TeamCity Cpp Boost package
+#
+# Search for TeamCity Boost UTF integration files and set the following variables
+# (as recommended by CMake finder module guidelines):
+#   TEAMCITY_CPP_BOOST_FOUND          - is package found
+#   TEAMCITY_CPP_BOOST_INSTALL_PREFIX - install prefix
+#   TEAMCITY_CPP_BOOST_VERSION        - found package version
+#
+
+@PACKAGE_INIT@
+
+get_filename_component(TEAMCITY_CPP_BOOST_INSTALL_PREFIX "${CMAKE_CURRENT_LIST_DIR}/../" ABSOLUTE)
+
+# Setup some version strings as recommended by CMake guidelines
+set(TEAMCITY_CPP_BOOST_VERSION "@PROJECT_VERSION@")
+
+if(NOT TARGET teamcity-cpp-boost)
+    add_library(
+        teamcity-cpp-boost OBJECT
+        "${TEAMCITY_CPP_BOOST_INSTALL_PREFIX}/teamcity_boost.cpp"
+        "${TEAMCITY_CPP_BOOST_INSTALL_PREFIX}/teamcity_message.cpp"
+      )
+endif()

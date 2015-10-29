@@ -32,12 +32,34 @@ else()
       )
 endif()
 
+configure_package_config_file(
+    teamcity-cpp-boost-config.cmake.in
+    teamcity-cpp-boost-config.cmake
+    INSTALL_DESTINATION "${PROJECT_NAME}-boost-${PROJECT_VERSION}/cmake"
+    NO_SET_AND_CHECK_MACRO
+    NO_CHECK_REQUIRED_COMPONENTS_MACRO
+  )
+
+write_basic_package_version_file(
+    teamcity-cpp-boost-config-version.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+  )
+
 install(
     FILES
         teamcity_boost.cpp
         ../common/teamcity_messages.cpp
         ../common/teamcity_messages.h
     DESTINATION "${PROJECT_NAME}-boost-${PROJECT_VERSION}"
+    COMPONENT boost
+  )
+
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/teamcity-cpp-boost-config.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/teamcity-cpp-boost-config-version.cmake"
+    DESTINATION "${PROJECT_NAME}-boost-${PROJECT_VERSION}/cmake"
     COMPONENT boost
   )
 

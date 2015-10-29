@@ -22,6 +22,7 @@ find_package(GTest)
 find_package(CppUnit)
 find_package(Threads)
 
+include(CMakePackageConfigHelpers)
 include(RenderTestRunner)
 include(CTest)
 enable_testing()
