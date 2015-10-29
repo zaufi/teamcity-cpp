@@ -184,7 +184,7 @@ void TeamcityMessages::testIgnored(std::string name, std::string message, std::s
     msg.writePropertyIfNonEmpty("flowId", flowId);
 }
 
-void TeamcityMessages::testOutput(std::string name, std::string output, std::string flowId, bool isStdError)
+void TeamcityMessages::testOutput(std::string name, std::string output, std::string flowId, const bool isStdError)
 {
     RaiiMessage msg(isStdError ? "testStdErr" : "testStdOut", *m_out);
     msg.writeProperty("name", name);

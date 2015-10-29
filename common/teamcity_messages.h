@@ -21,9 +21,11 @@
 #include <iosfwd>
 
 namespace jetbrains { namespace teamcity {
-
+/// \name Helper functions
+//@{
 std::string getFlowIdFromEnvironment();
 bool underTeamcity();
+//@}
 
 class TeamcityMessages
 {
@@ -41,10 +43,12 @@ public:
     void suiteFinished(std::string name, std::string flowid = std::string());
 
     void testStarted(std::string name, std::string flowid = std::string(), bool captureStandardOutput = false);
+    void testFinished(std::string name, int durationMs = -1, std::string flowid = std::string());
+
     void testFailed(std::string name, std::string message, std::string details, std::string flowid = std::string());
     void testIgnored(std::string name, std::string message, std::string flowid = std::string());
+
     void testOutput(std::string name, std::string output, std::string flowid, bool isStdErr = StdOut);
-    void testFinished(std::string name, int durationMs = -1, std::string flowid = std::string());
 };
 
 }}                                                          // namespace teamcity, jetbrains
