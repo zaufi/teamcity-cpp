@@ -133,7 +133,7 @@ void TeamcityBoostLogFormatter::log_finish(std::ostream& /*out*/)
 void TeamcityBoostLogFormatter::log_build_info(std::ostream& /*out*/)
 {}
 
-void TeamcityBoostLogFormatter::test_unit_start(std::ostream& out, const boost::unit_test::test_unit& tu)
+void TeamcityBoostLogFormatter::test_unit_start(std::ostream& /*out*/, const boost::unit_test::test_unit& tu)
 {
     if (tu.p_type == UNIT_TEST_CASE)
         messages.testStarted(tu.p_name, flowId);
@@ -143,7 +143,7 @@ void TeamcityBoostLogFormatter::test_unit_start(std::ostream& out, const boost::
     currentDetails.clear();
 }
 
-void TeamcityBoostLogFormatter::test_unit_finish(std::ostream& out, const boost::unit_test::test_unit& tu, unsigned long elapsed)
+void TeamcityBoostLogFormatter::test_unit_finish(std::ostream& /*out*/, const boost::unit_test::test_unit& tu, unsigned long elapsed)
 {
     const boost::unit_test::test_results& tr = boost::unit_test::results_collector.results(tu.p_id);
     if (tu.p_type == UNIT_TEST_CASE)
