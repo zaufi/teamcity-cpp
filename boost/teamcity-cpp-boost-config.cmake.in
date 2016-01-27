@@ -2,9 +2,21 @@
 #
 # Search for TeamCity Boost UTF integration files and set the following variables
 # (as recommended by CMake finder module guidelines):
-#   TEAMCITY_CPP_BOOST_FOUND          - is package found
 #   TEAMCITY_CPP_BOOST_INSTALL_PREFIX - install prefix
 #   TEAMCITY_CPP_BOOST_VERSION        - found package version
+#
+# Also, find_package() would define a result variable named after module name
+# and `_FOUND` suffix, which is `teamcity-cpp-boost_FOUND`.
+# (yeah! `-` is a valid symbol for CMake identifiers ;-)
+#
+# This module provides an object library so you may add integration sources
+# to your unit tests executable like this:
+#
+#   add_executable(
+#       your-unit-tests-binary
+#       test.cpp
+#       $<TARGET_OBJECTS:teamcity-cpp-boost>
+#     )
 #
 
 @PACKAGE_INIT@
@@ -18,6 +30,7 @@ if(NOT TARGET teamcity-cpp-boost)
     add_library(
         teamcity-cpp-boost OBJECT
         "${TEAMCITY_CPP_BOOST_INSTALL_PREFIX}/teamcity_boost.cpp"
-        "${TEAMCITY_CPP_BOOST_INSTALL_PREFIX}/teamcity_message.cpp"
+        "${TEAMCITY_CPP_BOOST_INSTALL_PREFIX}/teamcity_messages.cpp"
       )
+    message(STATUS "Found TeamCity C++ Boost UTF integration library: ${TEAMCITY_CPP_BOOST_VERSION}")
 endif()
