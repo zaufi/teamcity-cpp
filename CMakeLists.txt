@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 # ATTENTION Change this version on release
 # TODO Get it via git?
-set(teamcity_cpp_version 1.6)
+set(teamcity_cpp_version 1.7)
 
 cmake_policy(SET CMP0048 NEW)
 project(teamcity-cpp VERSION ${teamcity_cpp_version} LANGUAGES CXX)
