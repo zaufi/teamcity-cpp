@@ -24,9 +24,9 @@ if(Boost_VERSION VERSION_LESS 106000)
       )
 endif()
 
-# NOTE Boost 1.60 require C++11 for data based tests
-# TODO Check other (upcoming) versions
-if(Boost_VERSION VERSION_EQUAL 106000)
+# NOTE Boost >= 1.60 require C++11 for data based tests
+# TODO Check other (upcoming) versions (after 1.61)
+if(Boost_VERSION VERSION_GREATER 106000)
     target_compile_features(
         boost_test
         PRIVATE cxx_uniform_initialization
