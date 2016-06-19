@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.4)
 
-project(tctest VERSION ${teamcity_cpp_version} LANGUAGES CXX)
+project(tctest VERSION 1.0.0 LANGUAGES CXX)
 
 # Find Boost UTF...
 find_package(Boost COMPONENTS unit_test_framework)
