@@ -32,5 +32,9 @@ if(NOT TARGET teamcity-cpp-boost)
         "${TEAMCITY_CPP_BOOST_INSTALL_PREFIX}/teamcity_boost.cpp"
         "${TEAMCITY_CPP_BOOST_INSTALL_PREFIX}/teamcity_messages.cpp"
       )
+    target_link_libraries(
+        teamcity-cpp-boost
+        Boost::unit_test_framework
+      )
     message(STATUS "Found TeamCity C++ Boost UTF integration library: ${TEAMCITY_CPP_BOOST_VERSION}")
 endif()
