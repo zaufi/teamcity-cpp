@@ -25,3 +25,10 @@ License
 
 Apache, version 2.0
 http://www.apache.org/licenses/LICENSE-2.0
+
+
+TODO
+----
+
+* Use CMake > 3.5 and imported targets from `Boost`
+* Proper name (w/ a namespace) for exported target
