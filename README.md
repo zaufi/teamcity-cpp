@@ -18,7 +18,7 @@ See http://confluence.jetbrains.com/display/TW/Cpp+Unit+Test+Reporting for downl
 How to build with CMake
 =======================
 
-    $ cd teamcity-cpp-X.Y.Z
+    $ cd teamcity-cpp-X.Y
     $ mkdir build
     $ cd build
     $ cmake -DCMAKE_INSTALL_PREFIX=/usr/local/share ..
@@ -39,7 +39,7 @@ Boost UTF integration provides an exported target for your pleasure. Finding the
 to your project. In fact, it is [object library](https://cmake.org/cmake/help/latest/command/add_library.html#object-libraries),
 so to link it with your unit tests executable, one ought to add the following snippet to your `CMakeLists.txt`:
 
-    find_package(teamcity-cpp-boost 1.7.3)
+    find_package(teamcity-cpp-boost 1.8)
 
     add_executable(your-unit-tests-binary-name ... $<TARGET_OBJECTS:teamcity-cpp-boost> ...)
 
