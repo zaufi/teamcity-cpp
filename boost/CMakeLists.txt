@@ -5,11 +5,6 @@ add_executable(
     $<TARGET_OBJECTS:common>
   )
 
-target_include_directories(
-    boost_test PRIVATE
-    ${Boost_INCLUDE_DIRS}
-  )
-
 target_compile_definitions(
     boost_test PRIVATE
     -DBOOST_TEST_DYN_LINK
@@ -35,17 +30,22 @@ endif()
 
 target_link_libraries(
     boost_test PRIVATE
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    Boost::unit_test_framework
   )
 
 if(Boost_VERSION VERSION_LESS 105900)
     render_test_runner(
         TARGET boost_test
       )
-else()
+elseif(Boost_VERSION VERSION_LESS 106200)
     render_test_runner(
         TARGET boost_test
         VERSION 1_59
+      )
+else()
+    render_test_runner(
+        TARGET boost_test
+        VERSION 1_62
       )
 endif()
 

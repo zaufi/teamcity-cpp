@@ -13,3 +13,33 @@ Alternatively you may use XML Report Processing to import results from running t
 Also use it for not yet supported frameworks such as CxxTest.
 
 See http://confluence.jetbrains.com/display/TW/Cpp+Unit+Test+Reporting for downloads and more information.
+
+
+How to build with CMake
+=======================
+
+    $ cd teamcity-cpp-X.Y.Z
+    $ mkdir build
+    $ cd build
+    $ cmake -DCMAKE_INSTALL_PREFIX=/usr/local/share ..
+    $ make
+    $ make test
+    $ make install
+
+At configure step (i.e. running `cmake`) one may add options to explicitly require or ignore particulat testing libraries:
+* `ENABLE_BOOST`
+* `ENABLE_GTEST`
+* `ENABLE_CPPUNIT`
+
+
+How to use Boost listener with CMake-based projects
+===================================================
+
+Boost UTF integration provides an exported target for your pleasure. Finding the `teamcity-cpp-boost` would "import" it
+to your project. In fact, it is [object library](https://cmake.org/cmake/help/latest/command/add_library.html#object-libraries),
+so to link it with your unit tests executable, one ought to add the following snippet to your `CMakeLists.txt`:
+
+    find_package(teamcity-cpp-boost 1.7.3)
+
+    add_executable(your-unit-tests-binary-name ... $<TARGET_OBJECTS:teamcity-cpp-boost> ...)
+
