@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.6)
 
 project(tctest VERSION 1.0.0 LANGUAGES CXX)
 
@@ -19,5 +19,5 @@ add_executable(
 # Link w/ boost UTF (as usual)
 target_link_libraries(
     tctest
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    Boost::unit_test_framework
   )
