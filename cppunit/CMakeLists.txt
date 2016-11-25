@@ -1,23 +1,25 @@
-add_executable(
-    cppunit_test
-    cppunit_test.cpp
-    teamcity_cppunit.cpp
-    $<TARGET_OBJECTS:common>
-  )
+if(BUILD_TESTING)
+    add_executable(
+        cppunit_test
+        cppunit_test.cpp
+        teamcity_cppunit.cpp
+        $<TARGET_OBJECTS:common>
+      )
 
-target_include_directories(
-    cppunit_test PRIVATE
-    ${CPPUNIT_INCLUDE_DIRS}
-  )
+    target_include_directories(
+        cppunit_test PRIVATE
+        ${CPPUNIT_INCLUDE_DIRS}
+      )
 
-target_link_libraries(
-    cppunit_test PRIVATE
-    ${CPPUNIT_LIBRARIES}
-  )
+    target_link_libraries(
+        cppunit_test PRIVATE
+        ${CPPUNIT_LIBRARIES}
+      )
 
-render_test_runner(
-    TARGET cppunit_test
-  )
+    render_test_runner(
+        TARGET cppunit_test
+      )
+endif()
 
 install(
     FILES

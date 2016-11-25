@@ -1,24 +1,26 @@
-add_executable(
-    gtest_test
-    gtest_test.cpp
-    teamcity_gtest.cpp
-    $<TARGET_OBJECTS:common>
-  )
+if(BUILD_TESTING)
+    add_executable(
+        gtest_test
+        gtest_test.cpp
+        teamcity_gtest.cpp
+        $<TARGET_OBJECTS:common>
+      )
 
-target_include_directories(
-    gtest_test PRIVATE
-    ${GTEST_INCLUDE_DIRS}
-  )
+    target_include_directories(
+        gtest_test PRIVATE
+        ${GTEST_INCLUDE_DIRS}
+      )
 
-target_link_libraries(
-    gtest_test PRIVATE
-    ${GTEST_LIBRARY}
-    ${CMAKE_THREAD_LIBS_INIT}
-  )
+    target_link_libraries(
+        gtest_test PRIVATE
+        ${GTEST_LIBRARY}
+        ${CMAKE_THREAD_LIBS_INIT}
+      )
 
-render_test_runner(
-    TARGET gtest_test
-  )
+    render_test_runner(
+        TARGET gtest_test
+      )
+endif()
 
 install(
     FILES

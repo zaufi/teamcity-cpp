@@ -1,52 +1,54 @@
-add_executable(
-    boost_test
-    boost_test.cpp
-    teamcity_boost.cpp
-    $<TARGET_OBJECTS:common>
-  )
+if(BUILD_TESTING)
+    add_executable(
+        boost_test
+        boost_test.cpp
+        teamcity_boost.cpp
+        $<TARGET_OBJECTS:common>
+      )
 
-target_compile_definitions(
-    boost_test PRIVATE
-    -DBOOST_TEST_DYN_LINK
-  )
-
-# NOTE Boost prior 1.60 incorrectly recognize preprocessor variadics
-# for GCC/clang
-if(Boost_VERSION VERSION_LESS 106000)
     target_compile_definitions(
         boost_test PRIVATE
-        -DBOOST_PP_VARIADICS=1
+        -DBOOST_TEST_DYN_LINK
       )
-endif()
 
-# NOTE Boost >= 1.60 require C++11 for data based tests
-# TODO Check other (upcoming) versions (after 1.61)
-if(Boost_VERSION VERSION_GREATER 106000)
-    target_compile_features(
-        boost_test
-        PRIVATE cxx_uniform_initialization
-      )
-endif()
+    # NOTE Boost prior 1.60 incorrectly recognize preprocessor variadics
+    # for GCC/clang
+    if(Boost_VERSION VERSION_LESS 106000)
+        target_compile_definitions(
+            boost_test PRIVATE
+            -DBOOST_PP_VARIADICS=1
+          )
+    endif()
 
-target_link_libraries(
-    boost_test PRIVATE
-    Boost::unit_test_framework
-  )
+    # NOTE Boost >= 1.60 require C++11 for data based tests
+    # TODO Check other (upcoming) versions (after 1.61)
+    if(Boost_VERSION VERSION_GREATER 106000)
+        target_compile_features(
+            boost_test
+            PRIVATE cxx_uniform_initialization
+          )
+    endif()
 
-if(Boost_VERSION VERSION_LESS 105900)
-    render_test_runner(
-        TARGET boost_test
+    target_link_libraries(
+        boost_test PRIVATE
+        Boost::unit_test_framework
       )
-elseif(Boost_VERSION VERSION_LESS 106200)
-    render_test_runner(
-        TARGET boost_test
-        VERSION 1_59
-      )
-else()
-    render_test_runner(
-        TARGET boost_test
-        VERSION 1_62
-      )
+
+    if(Boost_VERSION VERSION_LESS 105900)
+        render_test_runner(
+            TARGET boost_test
+          )
+    elseif(Boost_VERSION VERSION_LESS 106200)
+        render_test_runner(
+            TARGET boost_test
+            VERSION 1_59
+          )
+    else()
+        render_test_runner(
+            TARGET boost_test
+            VERSION 1_62
+          )
+    endif()
 endif()
 
 configure_package_config_file(
