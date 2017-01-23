@@ -85,4 +85,5 @@ install(
 cpack_add_component(
     boost
     DISPLAY_NAME "Boost Unit Test Framework support"
+    ARCHIVE_FILE "${PROJECT_NAME}-boost-${PROJECT_VERSION}"
   )
