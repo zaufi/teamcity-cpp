@@ -4,7 +4,12 @@ cmake_policy(SET CMP0048 NEW)
 
 # ATTENTION Change this version on release
 # TODO Get it via git?
-project(teamcity-cpp VERSION 1.9.0 LANGUAGES CXX)
+project(
+    teamcity-cpp
+    VERSION 1.9.0
+    DESCRIPTION "C++ Tests Reporting to TeamCity"
+    LANGUAGES CXX
+  )
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
