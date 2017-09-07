@@ -43,10 +43,15 @@ if(BUILD_TESTING)
             TARGET boost_test
             VERSION 1_59
           )
-    else()
+    elseif(Boost_VERSION VERSION_LESS 106500)
         render_test_runner(
             TARGET boost_test
             VERSION 1_62
+          )
+    else()
+        render_test_runner(
+            TARGET boost_test
+            VERSION 1_65
           )
     endif()
 endif()

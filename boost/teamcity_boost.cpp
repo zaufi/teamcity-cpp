@@ -1,4 +1,5 @@
 /* Copyright 2011 JetBrains s.r.o.
+ * Copyright 2015-2017 Alex Turbov <i.zaufi@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,8 +95,13 @@ public:
 
     virtual void log_exception_finish(std::ostream&);
     virtual void entry_context_start(std::ostream&, boost::unit_test::log_level);
+# if BOOST_VERSION < 106500
     virtual void log_entry_context(std::ostream&, boost::unit_test::const_string);
     virtual void entry_context_finish(std::ostream&);
+# else                                                      // BOOST_VERSION >= 106500
+    virtual void log_entry_context(std::ostream&, boost::unit_test::log_level, boost::unit_test::const_string);
+    virtual void entry_context_finish(std::ostream&, boost::unit_test::log_level);
+# endif                                                     // BOOST_VERSION >= 106500
 #endif                                                      // BOOST_VERSION >= 105900
 };
 
@@ -112,7 +118,11 @@ struct TeamcityFormatterRegistrar
     }
 };
 
-BOOST_GLOBAL_FIXTURE(TeamcityFormatterRegistrar);
+#if BOOST_VERSION < 106500
+    BOOST_GLOBAL_FIXTURE(TeamcityFormatterRegistrar);
+#else                                                       // BOOST_VERSION >= 106500
+    BOOST_TEST_GLOBAL_CONFIGURATION(TeamcityFormatterRegistrar);
+#endif                                                      // BOOST_VERSION >= 106500
 
 TeamcityBoostLogFormatter::TeamcityBoostLogFormatter(const std::string& id)
   : flowId(id)
@@ -238,13 +248,21 @@ void TeamcityBoostLogFormatter::entry_context_start(std::ostream& out, boost::un
     currentContextDetails = initial_msg;
 }
 
+# if BOOST_VERSION < 106500
 void TeamcityBoostLogFormatter::log_entry_context(std::ostream& out, boost::unit_test::const_string ctx)
+# else                                                      // BOOST_VERSION >= 106500
+void TeamcityBoostLogFormatter::log_entry_context(std::ostream& out, boost::unit_test::log_level, boost::unit_test::const_string ctx)
+# endif                                                     // BOOST_VERSION >= 106500
 {
     out << "\n " << ctx;
     currentContextDetails += "\n " + toString(ctx);
 }
 
+# if BOOST_VERSION < 106500
 void TeamcityBoostLogFormatter::entry_context_finish(std::ostream& out)
+# else                                                      // BOOST_VERSION >= 106500
+void TeamcityBoostLogFormatter::entry_context_finish(std::ostream& out, boost::unit_test::log_level)
+# endif                                                     // BOOST_VERSION >= 106500
 {
     out.flush();
     messages.testOutput(
@@ -254,5 +272,6 @@ void TeamcityBoostLogFormatter::entry_context_finish(std::ostream& out)
       , TeamcityMessages::StdErr
       );
 }
+
 #endif                                                      // BOOST_VERSION >= 105900
 }}                                                          // namespace teamcity, jetbrains
