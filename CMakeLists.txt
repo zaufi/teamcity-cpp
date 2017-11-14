@@ -1,16 +1,24 @@
-cmake_minimum_required(VERSION 3.9)
+#
+# TeamCity C++ Reporting
+#
 
-cmake_policy(SET CMP0048 NEW)
+#---------------------------------------------------------
+# Init cmake
+#---------------------------------------------------------
+cmake_minimum_required(VERSION 3.9)
 
 # ATTENTION Change this version on release
 # TODO Get it via git?
 project(
     teamcity-cpp
-    VERSION 1.9.0
+    VERSION 3.0.0
     DESCRIPTION "C++ Tests Reporting to TeamCity"
     LANGUAGES CXX
   )
 
+#---------------------------------------------------------
+# Setup package options and find required packages
+#---------------------------------------------------------
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 set(ENABLE_BOOST "AUTO" CACHE STRING "Enable boost support (default auto)")
@@ -56,23 +64,15 @@ if(ENABLE_CPPUNIT OR ENABLE_CPPUNIT STREQUAL "AUTO")
 endif()
 find_package(Threads)
 
+include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 include(RenderTestRunner)
 include(CTest)
 enable_testing()
 
-include_directories(common)
-
-if(WIN32)
-    set(CPACK_GENERATOR ZIP)
-else()
-    set(CPACK_GENERATOR TBZ2)
-endif()
-set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
-set(CPACK_INSTALL_PREFIX "")
-include(CPack)
+#---------------------------------------------------------
+# Dive into sub-directories
+#---------------------------------------------------------
 
 add_subdirectory(common)
 if(HAVE_BOOST)
@@ -84,3 +84,41 @@ endif()
 if(HAVE_CPPUNIT)
     add_subdirectory(cppunit)
 endif()
+
+#---------------------------------------------------------
+# Prepare package configs
+#---------------------------------------------------------
+
+configure_package_config_file(
+    ${PROJECT_NAME}-config.cmake.in
+    ${PROJECT_NAME}-config.cmake
+    INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake"
+  )
+
+write_basic_package_version_file(
+    ${PROJECT_NAME}-config-version.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+  )
+
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME}-${PROJECT_VERSION}"
+    COMPONENT boost
+  )
+
+#---------------------------------------------------------
+# Prepare to make packages
+#---------------------------------------------------------
+
+if(WIN32)
+    set(CPACK_GENERATOR ZIP)
+else()
+    set(CPACK_GENERATOR TBZ2)
+endif()
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
+include(CPack)

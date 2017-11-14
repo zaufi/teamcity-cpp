@@ -1,0 +1,78 @@
+#[=======================================================================[.rst:
+Find C++ Tests Reporting to TeamCity package
+--------------------------------------------
+
+Search for "@PROJECT_DESCRIPTION@" package and components.
+The module set the following variables as recommended by CMake finder
+module guidelines:
+
+- :cmake:variable:`TEAMCITY_CPP_INSTALL_PREFIX` install prefix
+- :cmake:variable:`TEAMCITY_CPP_VERSION` found package version
+
+This module provides an interface library, so you may easy link your
+executable with it:
+
+.. code-block:: cmake
+
+    find_package(teamcity-cpp COMPONENTS boost)
+
+    add_executable(
+        your-unit-tests-binary
+        my-test.cc
+        ... # Other sources
+      )
+    target_link_libraries(
+        your-unit-tests-binary
+        TeamCity::cpp::boost
+        ... # Other dependencies
+      )
+
+#]=======================================================================]
+
+@PACKAGE_INIT@
+
+# Setup some version strings as recommended by CMake guidelines
+set(TEAMCITY_CPP_VERSION "@PROJECT_VERSION@")
+
+get_filename_component(TEAMCITY_CPP_INSTALL_PREFIX "${CMAKE_CURRENT_LIST_DIR}/../../@PROJECT_NAME@-${TEAMCITY_CPP_VERSION}" ABSOLUTE)
+
+set(teamcity-cpp_FOUND_COMPONENTS)
+if("boost" IN_LIST teamcity-cpp_FIND_COMPONENTS)
+    if(NOT TARGET teamcity-cpp-boost)
+        add_library(teamcity-cpp-boost INTERFACE)
+        add_library(TeamCity::cpp::boost ALIAS teamcity-cpp-boost)
+    endif()
+
+    if(TARGET Boost::unit_test_framework)
+        target_link_libraries(teamcity-cpp-boost INTERFACE Boost::unit_test_framework)
+    endif()
+
+    target_sources(
+        teamcity-cpp-boost
+        INTERFACE
+            "${TEAMCITY_CPP_INSTALL_PREFIX}/teamcity_boost.cpp"
+            "${TEAMCITY_CPP_INSTALL_PREFIX}/teamcity_messages.cpp"
+            "${TEAMCITY_CPP_INSTALL_PREFIX}/teamcity_messages.h"
+      )
+
+    set(teamcity-cpp_boost_FOUND TRUE)
+
+    message(STATUS "Found TeamCity C++ integration library: ${TEAMCITY_CPP_VERSION}")
+endif()
+# TODO Add/Check other components
+
+set(teamcity-cpp_FOUND TRUE)
+check_required_components(teamcity-cpp)
+
+if(teamcity-cpp_FOUND)
+    message(STATUS "Found @PROJECT_DESCRIPTION@: ${ONIXS_VERSION}")
+    foreach(_module ${teamcity-cpp_FOUND_COMPONENTS})
+        message(STATUS "  ${_module}")
+    endforeach()
+    unset(_module)
+
+elseif(NOT teamcity-cpp_FIND_QUIETLY)
+    message(
+        SEND_ERROR "The following required components of @PROJECT_DESCRIPTION@ not found: ${teamcity-cpp_NOT_FOUND_REQUIRED_COMPONENTS}"
+      )
+endif()
