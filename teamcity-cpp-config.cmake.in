@@ -54,25 +54,20 @@ if("boost" IN_LIST teamcity-cpp_FIND_COMPONENTS)
             "${TEAMCITY_CPP_INSTALL_PREFIX}/teamcity_messages.cpp"
             "${TEAMCITY_CPP_INSTALL_PREFIX}/teamcity_messages.h"
       )
+    # TODO Make sure all mentioned source files are really exists.
 
     set(teamcity-cpp_boost_FOUND TRUE)
-
-    message(STATUS "Found TeamCity C++ integration library: ${TEAMCITY_CPP_VERSION}")
+    list(APPEND teamcity-cpp_FOUND_COMPONENTS boost)
 endif()
 # TODO Add/Check other components
 
 set(teamcity-cpp_FOUND TRUE)
 check_required_components(teamcity-cpp)
 
-if(teamcity-cpp_FOUND)
-    message(STATUS "Found @PROJECT_DESCRIPTION@: ${ONIXS_VERSION}")
+if(teamcity-cpp_FOUND AND NOT teamcity-cpp_FIND_QUIETLY)
+    message(STATUS "Found @PROJECT_DESCRIPTION@: ${TEAMCITY_CPP_VERSION}")
     foreach(_module ${teamcity-cpp_FOUND_COMPONENTS})
         message(STATUS "  ${_module}")
     endforeach()
     unset(_module)
-
-elseif(NOT teamcity-cpp_FIND_QUIETLY)
-    message(
-        SEND_ERROR "The following required components of @PROJECT_DESCRIPTION@ not found: ${teamcity-cpp_NOT_FOUND_REQUIRED_COMPONENTS}"
-      )
 endif()
