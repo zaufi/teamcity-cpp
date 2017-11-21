@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.9)
 # TODO Get it via git?
 project(
     teamcity-cpp
-    VERSION 3.0.1
+    VERSION 3.0.2
     DESCRIPTION "C++ Tests Reporting to TeamCity"
     LANGUAGES CXX
   )
@@ -88,7 +88,12 @@ endif()
 #---------------------------------------------------------
 # Prepare package configs
 #---------------------------------------------------------
-
+# NOTE In fact, this package do not install any
+# binary code, so could be considered as `noarch`.
+# To make it so, `CMAKE_SIZEOF_VOID_P` must be unset
+# before generate package configuration files, so being
+# found it won't check target architecture.
+unset(CMAKE_SIZEOF_VOID_P)
 configure_package_config_file(
     ${PROJECT_NAME}-config.cmake.in
     ${PROJECT_NAME}-config.cmake

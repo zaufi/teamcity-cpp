@@ -71,3 +71,10 @@ if(teamcity-cpp_FOUND AND NOT teamcity-cpp_FIND_QUIETLY)
     endforeach()
     unset(_module)
 endif()
+
+include(FeatureSummary)
+set_package_properties(
+    @PROJECT_NAME@ PROPERTIES
+    URL "https://github.com/zaufi/teamcity-cpp"
+    DESCRIPTION "@PROJECT_DESCRIPTION@"
+  )
