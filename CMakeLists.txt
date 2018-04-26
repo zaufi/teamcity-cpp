@@ -5,13 +5,13 @@
 #---------------------------------------------------------
 # Init cmake
 #---------------------------------------------------------
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.11)
 
 # ATTENTION Change this version on release
 # TODO Get it via git?
 project(
     teamcity-cpp
-    VERSION 3.0.2
+    VERSION 3.0.3
     DESCRIPTION "C++ Tests Reporting to TeamCity"
     LANGUAGES CXX
   )
