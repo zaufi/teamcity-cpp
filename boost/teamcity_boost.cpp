@@ -1,5 +1,5 @@
 /* Copyright 2011 JetBrains s.r.o.
- * Copyright 2015-2017 Alex Turbov <i.zaufi@gmail.com>
+ * Copyright 2015-2018 Alex Turbov <i.zaufi@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,19 +79,42 @@ public:
     virtual void log_finish(std::ostream&);
     virtual void log_build_info(std::ostream&);
 
-    virtual void test_unit_start(std::ostream&, const boost::unit_test::test_unit&);
-    virtual void test_unit_finish(std::ostream&, const boost::unit_test::test_unit&, unsigned long);
+    virtual void test_unit_start(
+        std::ostream&
+      , const boost::unit_test::test_unit&
+      );
+    virtual void test_unit_finish(
+        std::ostream&
+      , const boost::unit_test::test_unit&
+      , unsigned long
+      );
 
-    virtual void log_entry_start(std::ostream&, const boost::unit_test::log_entry_data&, log_entry_types);
+    virtual void log_entry_start(
+        std::ostream&
+      , const boost::unit_test::log_entry_data&
+      , log_entry_types
+      );
     virtual void log_entry_value(std::ostream&, boost::unit_test::const_string);
     virtual void log_entry_finish(std::ostream&);
 
 #if BOOST_VERSION < 105900
-    virtual void log_exception(std::ostream&, const boost::unit_test::log_checkpoint_data&, boost::unit_test::const_string);
+    virtual void log_exception(
+        std::ostream&
+      , const boost::unit_test::log_checkpoint_data&
+      , boost::unit_test::const_string
+      );
     virtual void test_unit_skipped(std::ostream&, const boost::unit_test::test_unit&);
 #else                                                       // BOOST_VERSION >= 105900
-    virtual void log_exception_start(std::ostream&,const boost::unit_test::log_checkpoint_data&, const boost::execution_exception&);
-    virtual void test_unit_skipped(std::ostream&, const boost::unit_test::test_unit&, boost::unit_test::const_string);
+    virtual void log_exception_start(
+        std::ostream&
+      , const boost::unit_test::log_checkpoint_data&
+      , const boost::execution_exception&
+      );
+    virtual void test_unit_skipped(
+        std::ostream&
+      , const boost::unit_test::test_unit&
+      , boost::unit_test::const_string
+      );
 
     virtual void log_exception_finish(std::ostream&);
     virtual void entry_context_start(std::ostream&, boost::unit_test::log_level);
@@ -99,7 +122,11 @@ public:
     virtual void log_entry_context(std::ostream&, boost::unit_test::const_string);
     virtual void entry_context_finish(std::ostream&);
 # else                                                      // BOOST_VERSION >= 106500
-    virtual void log_entry_context(std::ostream&, boost::unit_test::log_level, boost::unit_test::const_string);
+    virtual void log_entry_context(
+        std::ostream&
+      , boost::unit_test::log_level
+      , boost::unit_test::const_string
+      );
     virtual void entry_context_finish(std::ostream&, boost::unit_test::log_level);
 # endif                                                     // BOOST_VERSION >= 106500
 #endif                                                      // BOOST_VERSION >= 105900
@@ -132,7 +159,10 @@ TeamcityBoostLogFormatter::TeamcityBoostLogFormatter()
   : flowId(getFlowIdFromEnvironment())
 {}
 
-void TeamcityBoostLogFormatter::log_start(std::ostream& out, boost::unit_test::counter_t /*test_cases_amount*/)
+void TeamcityBoostLogFormatter::log_start(
+    std::ostream& out
+  , boost::unit_test::counter_t /*test_cases_amount*/
+  )
 {
     messages.setOutput(out);
 }
@@ -143,7 +173,10 @@ void TeamcityBoostLogFormatter::log_finish(std::ostream& /*out*/)
 void TeamcityBoostLogFormatter::log_build_info(std::ostream& /*out*/)
 {}
 
-void TeamcityBoostLogFormatter::test_unit_start(std::ostream& /*out*/, const boost::unit_test::test_unit& tu)
+void TeamcityBoostLogFormatter::test_unit_start(
+    std::ostream& /*out*/
+  , const boost::unit_test::test_unit& tu
+  )
 {
     if (tu.p_type == UNIT_TEST_CASE)
         messages.testStarted(tu.p_name, flowId);
@@ -153,7 +186,11 @@ void TeamcityBoostLogFormatter::test_unit_start(std::ostream& /*out*/, const boo
     currentDetails.clear();
 }
 
-void TeamcityBoostLogFormatter::test_unit_finish(std::ostream& /*out*/, const boost::unit_test::test_unit& tu, unsigned long elapsed)
+void TeamcityBoostLogFormatter::test_unit_finish(
+    std::ostream& /*out*/
+  , const boost::unit_test::test_unit& tu
+  , const unsigned long elapsed
+  )
 {
     const boost::unit_test::test_results& tr = boost::unit_test::results_collector.results(tu.p_id);
     if (tu.p_type == UNIT_TEST_CASE)
@@ -176,7 +213,11 @@ void TeamcityBoostLogFormatter::test_unit_finish(std::ostream& /*out*/, const bo
     }
 }
 
-void TeamcityBoostLogFormatter::log_entry_start(std::ostream& out, const boost::unit_test::log_entry_data& entry_data, log_entry_types /*let*/)
+void TeamcityBoostLogFormatter::log_entry_start(
+    std::ostream& out
+  , const boost::unit_test::log_entry_data& entry_data
+  , log_entry_types /*let*/
+  )
 {
     std::stringstream ss(std::ios_base::out);
 
@@ -186,7 +227,10 @@ void TeamcityBoostLogFormatter::log_entry_start(std::ostream& out, const boost::
     currentDetails += ss.str();
 }
 
-void TeamcityBoostLogFormatter::log_entry_value(std::ostream& out, boost::unit_test::const_string value)
+void TeamcityBoostLogFormatter::log_entry_value(
+    std::ostream& out
+  , boost::unit_test::const_string value
+  )
 {
     out << value;
     currentDetails += toString(value);
@@ -210,7 +254,10 @@ void TeamcityBoostLogFormatter::log_exception(
     currentDetails += toString(explanation) + '\n';
 }
 
-void TeamcityBoostLogFormatter::test_unit_skipped(std::ostream& /*out*/, const boost::unit_test::test_unit& tu)
+void TeamcityBoostLogFormatter::test_unit_skipped(
+    std::ostream& /*out*/
+  , const boost::unit_test::test_unit& tu
+  )
 {
     messages.testIgnored(tu.p_name, "test ignored", flowId);
 }
@@ -229,6 +276,9 @@ void TeamcityBoostLogFormatter::log_exception_start(
     currentDetails += what + '\n';
 }
 
+void TeamcityBoostLogFormatter::log_exception_finish(std::ostream& /*out*/)
+{}
+
 void TeamcityBoostLogFormatter::test_unit_skipped(
     std::ostream& /*out*/
   , const boost::unit_test::test_unit& tu
@@ -238,10 +288,10 @@ void TeamcityBoostLogFormatter::test_unit_skipped(
     messages.testIgnored(tu.p_name, toString(reason), flowId);
 }
 
-void TeamcityBoostLogFormatter::log_exception_finish(std::ostream& /*out*/)
-{}
-
-void TeamcityBoostLogFormatter::entry_context_start(std::ostream& out, boost::unit_test::log_level l)
+void TeamcityBoostLogFormatter::entry_context_start(
+    std::ostream& out
+  , boost::unit_test::log_level l
+  )
 {
     const std::string& initial_msg = (l == boost::unit_test::log_successful_tests ? ASSERT_CTX : FAILURE_CTX);
     out << initial_msg;
@@ -249,9 +299,16 @@ void TeamcityBoostLogFormatter::entry_context_start(std::ostream& out, boost::un
 }
 
 # if BOOST_VERSION < 106500
-void TeamcityBoostLogFormatter::log_entry_context(std::ostream& out, boost::unit_test::const_string ctx)
+void TeamcityBoostLogFormatter::log_entry_context(
+    std::ostream& out
+  , boost::unit_test::const_string ctx
+  )
 # else                                                      // BOOST_VERSION >= 106500
-void TeamcityBoostLogFormatter::log_entry_context(std::ostream& out, boost::unit_test::log_level, boost::unit_test::const_string ctx)
+void TeamcityBoostLogFormatter::log_entry_context(
+    std::ostream& out
+  , boost::unit_test::log_level
+  , boost::unit_test::const_string ctx
+  )
 # endif                                                     // BOOST_VERSION >= 106500
 {
     out << "\n " << ctx;

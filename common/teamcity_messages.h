@@ -1,4 +1,5 @@
 /* Copyright 2011 JetBrains s.r.o.
+ * Copyright 2015-2018 Alex Turbov <i.zaufi@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,16 +40,44 @@ public:
 
     void setOutput(std::ostream&);
 
-    void suiteStarted(const std::string& name, const std::string& flowid = std::string());
-    void suiteFinished(const std::string& name, const std::string& flowid = std::string());
+    void suiteStarted(
+        const std::string& name
+      , const std::string& flowid = std::string()
+      );
+    void suiteFinished(
+        const std::string& name
+      , const std::string& flowid = std::string()
+      );
 
-    void testStarted(const std::string& name, const std::string& flowid = std::string(), bool captureStandardOutput = false);
-    void testFinished(const std::string& name, int durationMs = -1, const std::string& flowid = std::string());
+    void testStarted(
+        const std::string& name
+      , const std::string& flowid = std::string()
+      , bool captureStandardOutput = false
+      );
+    void testFinished(
+        const std::string& name
+      , int durationMs = -1
+      , const std::string& flowid = std::string()
+      );
 
-    void testFailed(const std::string& name, const std::string& message, const std::string& details, const std::string& flowid = std::string());
-    void testIgnored(const std::string& name, const std::string& message, const std::string& flowid = std::string());
+    void testFailed(
+        const std::string& name
+      , const std::string& message
+      , const std::string& details
+      , const std::string& flowid = std::string()
+      );
+    void testIgnored(
+        const std::string& name
+      , const std::string& message
+      , const std::string& flowid = std::string()
+      );
 
-    void testOutput(const std::string& name, const std::string& output, const std::string& flowid, bool isStdErr = StdOut);
+    void testOutput(
+        const std::string& name
+      , const std::string& output
+      , const std::string& flowid
+      , bool isStdErr = StdOut
+      );
 };
 
 }}                                                          // namespace teamcity, jetbrains
