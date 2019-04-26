@@ -34,7 +34,11 @@ executable with it:
 # Setup some version strings as recommended by CMake guidelines
 set(TEAMCITY_CPP_VERSION "@PROJECT_VERSION@")
 
-get_filename_component(TEAMCITY_CPP_INSTALL_PREFIX "${CMAKE_CURRENT_LIST_DIR}/../../@PROJECT_NAME@-${TEAMCITY_CPP_VERSION}" ABSOLUTE)
+get_filename_component(
+    TEAMCITY_CPP_INSTALL_PREFIX
+    "${CMAKE_CURRENT_LIST_DIR}/../../@PROJECT_NAME@-${TEAMCITY_CPP_VERSION}"
+    ABSOLUTE
+  )
 
 set(teamcity-cpp_FOUND_COMPONENTS)
 if("boost" IN_LIST teamcity-cpp_FIND_COMPONENTS)

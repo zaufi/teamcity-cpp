@@ -140,4 +140,30 @@ BOOST_AUTO_TEST_CASE(dependencyOkTest, *boost::unit_test::depends_on("testNothin
 {
     BOOST_TEST(true);
 }
+
+BOOST_AUTO_TEST_CASE(checkpointTest)
+{
+    BOOST_TEST_CHECKPOINT("This is checkpointTest");
+    BOOST_TEST(1 != 1);
+    throw std::runtime_error("Undefined Behaviour ahead!");
+}
+
+BOOST_AUTO_TEST_CASE(contextsTest)
+{
+    BOOST_TEST_INFO("This is contextsTest");
+    BOOST_TEST(false, "Intentionally failed test");
+
+    BOOST_TEST_CONTEXT("Alpha")
+    {
+        BOOST_TEST(1 != 1);
+
+        BOOST_TEST_CONTEXT("Be" << "ta")
+        BOOST_TEST(3 != 3);
+
+        BOOST_TEST(4 == 4);
+    }
+
+    BOOST_TEST(5 != 5);
+}
+
 #endif                                                      // BOOST_VERSION >= 105900

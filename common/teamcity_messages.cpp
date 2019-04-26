@@ -94,7 +94,7 @@ std::string getFlowIdFromEnvironment()
 
     return result;
 #else
-    const char *flowId = getenv("TEAMCITY_PROCESS_FLOW_ID");
+    const char* const flowId = getenv("TEAMCITY_PROCESS_FLOW_ID");
     return flowId == 0 ? std::string() : flowId;
 #endif
 }
