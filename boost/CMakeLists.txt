@@ -49,10 +49,16 @@ if(BUILD_TESTING)
             TARGET boost_test
             VERSION 1_62
           )
-    else()
+    elseif(Boost_VERSION VERSION_LESS 107000)
         render_test_runner(
             TARGET boost_test
             VERSION 1_65
+          )
+    else()
+        render_test_runner(
+            TARGET boost_test
+            VERSION 1_70
+            TEST_ARGS --color_output=0
           )
     endif()
 endif()

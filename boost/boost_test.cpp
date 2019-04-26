@@ -141,6 +141,9 @@ BOOST_AUTO_TEST_CASE(dependencyOkTest, *boost::unit_test::depends_on("testNothin
     BOOST_TEST(true);
 }
 
+// NOTE The following tests were added on migration to Boost 1.70
+# if BOOST_VERSION >= 107000
+
 BOOST_AUTO_TEST_CASE(checkpointTest)
 {
     BOOST_TEST_CHECKPOINT("This is checkpointTest");
@@ -165,5 +168,5 @@ BOOST_AUTO_TEST_CASE(contextsTest)
 
     BOOST_TEST(5 != 5);
 }
-
+# endif                                                     // BOOST_VERSION >= 107000
 #endif                                                      // BOOST_VERSION >= 105900

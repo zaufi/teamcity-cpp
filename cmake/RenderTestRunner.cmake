@@ -9,7 +9,7 @@ set(_rtr_base_dir "${CMAKE_CURRENT_LIST_DIR}")
 function(render_test_runner)
     set(_options)
     set(_one_value_args TARGET VERSION)
-    set(_multi_value_args)
+    set(_multi_value_args TEST_ARGS)
     cmake_parse_arguments(_rtr "${_options}" "${_one_value_args}" "${_multi_value_args}" ${ARGN})
 
     if(_rtr_VERSION)
@@ -33,18 +33,18 @@ function(render_test_runner)
 
     add_test(
         NAME ${_rtr_TARGET}
-        COMMAND ${CMAKE_COMMAND} -P "${_rtr_TARGET}.cmake"
+        COMMAND ${CMAKE_COMMAND} -DTEST_ARGS=${_rtr_TEST_ARGS} -P "${_rtr_TARGET}.cmake"
       )
 
     add_test(
         NAME ${_rtr_TARGET}_flowid
-        COMMAND ${CMAKE_COMMAND} -DPRETEND_TEAMCITY=ON -P "${_rtr_TARGET}.cmake"
+        COMMAND ${CMAKE_COMMAND} -DPRETEND_TEAMCITY=ON -DTEST_ARGS=${_rtr_TEST_ARGS} -P "${_rtr_TARGET}.cmake"
       )
 
     add_custom_target(
         update_${_rtr_TARGET}_expectations
-        COMMAND ${CMAKE_COMMAND} -DUPDATE_EXPECTATIONS=ON -P "${_rtr_TARGET}.cmake"
-        COMMAND ${CMAKE_COMMAND} -DUPDATE_EXPECTATIONS=ON -DPRETEND_TEAMCITY=ON -P "${_rtr_TARGET}.cmake"
+        COMMAND ${CMAKE_COMMAND} -DUPDATE_EXPECTATIONS=ON -DTEST_ARGS=${_rtr_TEST_ARGS} -P "${_rtr_TARGET}.cmake"
+        COMMAND ${CMAKE_COMMAND} -DUPDATE_EXPECTATIONS=ON -DPRETEND_TEAMCITY=ON -DTEST_ARGS=${_rtr_TEST_ARGS} -P "${_rtr_TARGET}.cmake"
         COMMENT "Update test output expectations at source directory: ${CMAKE_CURRENT_SOURCE_DIR}"
       )
 endfunction()

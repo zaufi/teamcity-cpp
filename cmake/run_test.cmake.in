@@ -15,7 +15,7 @@ else()
 endif()
 
 execute_process(
-    COMMAND "${CMAKE_CURRENT_LIST_DIR}/@_rtr_TARGET@"
+    COMMAND "${CMAKE_CURRENT_LIST_DIR}/@_rtr_TARGET@" ${TEST_ARGS}
     OUTPUT_FILE "@_rtr_TARGET@${_output_flavour}.output"
     ERROR_FILE "@_rtr_TARGET@${_output_flavour}.error"
   )
