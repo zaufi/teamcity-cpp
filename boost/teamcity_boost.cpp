@@ -1,5 +1,5 @@
 /* Copyright 2011 JetBrains s.r.o.
- * Copyright 2015-2018 Alex Turbov <i.zaufi@gmail.com>
+ * Copyright 2015-2019 Alex Turbov <i.zaufi@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,10 @@ std::string toString(const boost::execution_exception::error_code code)
             return std::string("user fatal error");
         case boost::execution_exception::system_fatal_error:
             return std::string("system fatal error");
+        case boost::execution_exception::timeout_error:
+            return std::string("timeout error");
+        default:
+            return std::string("unknown error");
     }
 }
 
@@ -217,7 +221,7 @@ void TeamcityBoostLogFormatter::log_finish(std::ostream& /*out*/)
 void TeamcityBoostLogFormatter::log_build_info(
     std::ostream& /*out*/
 #if BOOST_VERSION >= 107000
-  , const bool log_build_info
+  , const bool /*log_build_info*/
 #endif
   )
 {}
@@ -274,7 +278,7 @@ void TeamcityBoostLogFormatter::test_unit_finish(
 }
 
 void TeamcityBoostLogFormatter::log_entry_start(
-    std::ostream& out
+    std::ostream& /*out*/
   , const boost::unit_test::log_entry_data& entry_data
   , log_entry_types /*let*/
   )
@@ -285,14 +289,14 @@ void TeamcityBoostLogFormatter::log_entry_start(
 }
 
 void TeamcityBoostLogFormatter::log_entry_value(
-    std::ostream& out
+    std::ostream& /*out*/
   , boost::unit_test::const_string value
   )
 {
     currentDetails += toString(value);
 }
 
-void TeamcityBoostLogFormatter::log_entry_finish(std::ostream& out)
+void TeamcityBoostLogFormatter::log_entry_finish(std::ostream& /*out*/)
 {
     currentDetails += '\n';
 }
@@ -319,7 +323,7 @@ void TeamcityBoostLogFormatter::test_unit_skipped(
 #else                                                       // BOOST_VERSION >= 105900
 
 void TeamcityBoostLogFormatter::log_exception_start(
-    std::ostream& out
+    std::ostream& /*out*/
   , const boost::unit_test::log_checkpoint_data& cp
   , const boost::execution_exception& excpt
   )
@@ -350,7 +354,7 @@ void TeamcityBoostLogFormatter::test_unit_skipped(
 }
 
 void TeamcityBoostLogFormatter::entry_context_start(
-    std::ostream& out
+    std::ostream& /*out*/
   , boost::unit_test::log_level l
   )
 {
@@ -360,12 +364,12 @@ void TeamcityBoostLogFormatter::entry_context_start(
 
 # if BOOST_VERSION < 106500
 void TeamcityBoostLogFormatter::log_entry_context(
-    std::ostream& out
+    std::ostream& /*out*/
   , boost::unit_test::const_string ctx
   )
 # else                                                      // BOOST_VERSION >= 106500
 void TeamcityBoostLogFormatter::log_entry_context(
-    std::ostream& out
+    std::ostream& /*out*/
   , boost::unit_test::log_level
   , boost::unit_test::const_string ctx
   )
@@ -375,9 +379,9 @@ void TeamcityBoostLogFormatter::log_entry_context(
 }
 
 # if BOOST_VERSION < 106500
-void TeamcityBoostLogFormatter::entry_context_finish(std::ostream& out)
+void TeamcityBoostLogFormatter::entry_context_finish(std::ostream& /*out*/)
 # else                                                      // BOOST_VERSION >= 106500
-void TeamcityBoostLogFormatter::entry_context_finish(std::ostream& out, boost::unit_test::log_level)
+void TeamcityBoostLogFormatter::entry_context_finish(std::ostream& /*out*/, boost::unit_test::log_level)
 # endif                                                     // BOOST_VERSION >= 106500
 {
 }

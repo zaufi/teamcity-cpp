@@ -9,6 +9,10 @@ if(BUILD_TESTING)
         boost_test PRIVATE
         -DBOOST_TEST_DYN_LINK
       )
+    target_compile_options(
+        boost_test PRIVATE
+        -Wall -Wextra -Werror
+      )
 
     # NOTE Boost prior 1.60 incorrectly recognize preprocessor variadics
     # for GCC/clang
