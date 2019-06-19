@@ -70,8 +70,9 @@ std::string toString(const boost::execution_exception::error_code code)
         case boost::execution_exception::timeout_error:
             return std::string("timeout error");
         default:
-            return std::string("unknown error");
+            break;
     }
+    return std::string("unknown error");
 }
 
 std::string toString(const boost::execution_exception& excpt)
