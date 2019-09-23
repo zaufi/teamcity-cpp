@@ -1,17 +1,19 @@
 #define BOOST_TEST_MAIN
 
 #include <boost/version.hpp>
-/// \attention Some Boost UTF headers are *NOT self-contained*,
-/// so be aware about implicit heder dependencies...
+/// \attention Some Boost UTF headers (of some versions) are
+/// *NOT self-contained*, so be aware about implicit heder
+/// dependencies...
 #include <boost/test/unit_test.hpp>
-#include <boost/test/unit_test_log.hpp>
-#include <boost/test/framework.hpp>
+#include <boost/test/unit_test_log.hpp>                     // IWYU pragma: keep
+#include <boost/test/framework.hpp>                         // IWYU pragma: keep
 #if BOOST_VERSION >= 105900
 # include <boost/test/data/test_case.hpp>
-# include <boost/test/data/monomorphic.hpp>
+# include <boost/test/data/monomorphic.hpp>                 // IWYU pragma: keep
 #endif                                                      // BOOST_VERSION >= 105900
 
 #include <iostream>
+#include <stdexcept>
 
 /* Suite tree tests */
 BOOST_AUTO_TEST_SUITE(my_suite1)

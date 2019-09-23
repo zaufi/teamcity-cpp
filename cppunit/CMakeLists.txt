@@ -30,8 +30,3 @@ install(
     DESTINATION "${PROJECT_NAME}-cppunit-${PROJECT_VERSION}"
     COMPONENT cppunit
   )
-
-cpack_add_component(
-    cppunit
-    DISPLAY_NAME "CppUnit support"
-  )

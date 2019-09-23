@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include <string>
-#include <iosfwd>
+#include <iosfwd>                                           // IWYU pragma: export
+#include <string>                                           // IWYU pragma: export
 
 namespace jetbrains { namespace teamcity {
 /// \name Helper functions

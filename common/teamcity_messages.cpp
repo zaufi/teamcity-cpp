@@ -20,7 +20,7 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <sstream>
+#include <sstream>                                          // IWYU pragma: keep
 
 namespace jetbrains { namespace teamcity { namespace {
 /// Use RAII to write message open/close markers

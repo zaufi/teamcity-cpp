@@ -19,6 +19,9 @@
 #include "teamcity_messages.h"
 
 #include <boost/version.hpp>
+/// \attention Some Boost UTF headers (of some versions) are
+/// *NOT self-contained*, so be aware about implicit heder
+/// dependencies...
 #if BOOST_VERSION >= 105900
 # include <boost/test/execution_monitor.hpp>
 #else                                                       // BOOST_VERSION < 105900
@@ -26,11 +29,12 @@
 #endif                                                      // BOOST_VERSION < 105900
 #include <boost/test/results_collector.hpp>
 #include <boost/test/utils/basic_cstring/io.hpp>
-#include <boost/test/unit_test_log.hpp>
+#include <boost/test/unit_test_log.hpp>                     // IWYU pragma: keep
 #include <boost/test/unit_test_log_formatter.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <sstream>
+#include <cstddef>
+#include <ostream>
 
 namespace jetbrains { namespace teamcity { namespace {
 const std::string ASSERT_CTX = "Assertion has occurred in a following context:";

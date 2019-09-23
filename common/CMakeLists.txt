@@ -21,4 +21,11 @@ install(
     DESTINATION "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}-${PROJECT_VERSION}"
     COMPONENT boost
   )
+install(
+    FILES
+        teamcity_messages.cpp
+        teamcity_messages.h
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}-${PROJECT_VERSION}"
+    COMPONENT gtest
+  )
 # TODO Install this files to other components

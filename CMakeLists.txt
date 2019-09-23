@@ -25,6 +25,54 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 set(ENABLE_BOOST "AUTO" CACHE STRING "Enable boost support (default auto)")
 set(ENABLE_GTEST "AUTO" CACHE STRING "Enable GTest support (default auto)")
 set(ENABLE_CPPUNIT "AUTO" CACHE STRING "Enable CppUnit support (default auto)")
+option(ENABLE_IWYU "Try to use `include-what-you-use` (see http://include-what-you-use.org/)" OFF)
+set(
+    IWYU_AUX_ARGS
+    "-Xiwyu" "--max_line_length=120"
+    "-Xiwyu" "--quoted_includes_first"
+    # NOTE Uncomment the line below, if IWYU suggests you smth that you don't understand %)
+    #"-Xiwyu" "-v4"
+    CACHE STRING
+    "Additional parameters to IWYU"
+    FORCE
+  )
+mark_as_advanced(IWYU_AUX_ARGS)
+
+# Give a hint to the Boost finder to use dynamic libraries
+set(BUILD_SHARED_LIBS ON)
+
+if(ENABLE_IWYU)
+    message(STATUS "Looking for `iwyu`")
+    find_program(IWYU_EXECUTABLE NAMES include-what-you-use iwyu)
+    mark_as_advanced(IWYU_EXECUTABLE)
+    if(IWYU_EXECUTABLE)
+        message(STATUS "Looking for `iwyu` - found (${IWYU_EXECUTABLE})")
+        file(GLOB _iwyu_mapping_files "${PROJECT_SOURCE_DIR}/.iwyu.d/*.imp")
+        foreach(_iwyu_mapping_file IN LISTS _iwyu_mapping_files)
+            list(
+                APPEND _iwyu_mapping_args
+                "-Xiwyu"
+                "--mapping_file=${_iwyu_mapping_file}"
+              )
+        endforeach()
+        unset(_iwyu_mapping_file)
+        unset(_iwyu_mapping_files)
+        if(EXISTS "${PROJECT_SOURCE_DIR}/.iwyu.imp")
+            list(
+                APPEND _iwyu_mapping_args
+                "-Xiwyu"
+                "--mapping_file=${PROJECT_SOURCE_DIR}/.iwyu.imp"
+              )
+        endif()
+        set(CMAKE_C_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE};${IWYU_AUX_ARGS};${_iwyu_mapping_args}")
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${CMAKE_C_INCLUDE_WHAT_YOU_USE}")
+        unset(_iwyu_mapping_args)
+    else()
+        message(STATUS "Looking for `iwyu` - not found")
+        message(SEND_ERROR "`ENABLE_IWYU` has requested, but `iwyu` executable not found")
+        set(ENABLE_IWYU OFF)
+    endif()
+endif()
 
 # Find supported testing libs
 # - boost UTF
