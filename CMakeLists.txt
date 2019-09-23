@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.14)
 # TODO Get it via git?
 project(
     teamcity-cpp
-    VERSION 3.1.2
+    VERSION 3.2.0
     DESCRIPTION "C++ Tests Reporting to TeamCity"
     HOMEPAGE_URL "https://github.com/zaufi/teamcity-cpp"
     LANGUAGES CXX
