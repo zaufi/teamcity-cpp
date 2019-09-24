@@ -20,7 +20,7 @@
 
 #include <boost/version.hpp>
 /// \attention Some Boost UTF headers (of some versions) are
-/// *NOT self-contained*, so be aware about implicit heder
+/// *NOT self-contained*, so be aware about implicit header
 /// dependencies...
 #if BOOST_VERSION >= 105900
 # include <boost/test/execution_monitor.hpp>
@@ -35,6 +35,9 @@
 
 #include <cstddef>
 #include <ostream>
+// NOTE Due to IWYU BUG `string` header is not exported
+// properly from "teamcity_messages.h" to here...
+#include <string>                                           // IWYU pragma: keep
 
 namespace jetbrains { namespace teamcity { namespace {
 const std::string ASSERT_CTX = "Assertion has occurred in a following context:";

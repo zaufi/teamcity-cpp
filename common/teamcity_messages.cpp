@@ -21,6 +21,9 @@
 #include <cstdlib>
 #include <iostream>
 #include <sstream>                                          // IWYU pragma: keep
+// NOTE Due to IWYU BUG `string` header is not exported
+// properly from "teamcity_messages.h" to here...
+#include <string>                                           // IWYU pragma: keep
 
 namespace jetbrains { namespace teamcity { namespace {
 /// Use RAII to write message open/close markers

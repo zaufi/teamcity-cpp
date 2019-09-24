@@ -2,7 +2,7 @@
 
 #include <boost/version.hpp>
 /// \attention Some Boost UTF headers (of some versions) are
-/// *NOT self-contained*, so be aware about implicit heder
+/// *NOT self-contained*, so be aware about implicit header
 /// dependencies...
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_log.hpp>                     // IWYU pragma: keep
