@@ -40,7 +40,15 @@ if(BUILD_TESTING)
             Boost::unit_test_framework
       )
 
-    if(Boost_VERSION VERSION_LESS 105900)
+    # NOTE Boost 1.70.0 has native CMake support
+    # and the meaning of `Boost_VERSION` has changed!
+    if(Boost_VERSION VERSION_GREATER_EQUAL 1.70.0)
+        render_test_runner(
+            TARGET boost_test
+            VERSION 1_70
+            TEST_ARGS --color_output=no
+          )
+    elseif(Boost_VERSION VERSION_LESS 105900)
         render_test_runner(
             TARGET boost_test
           )
@@ -58,12 +66,13 @@ if(BUILD_TESTING)
         render_test_runner(
             TARGET boost_test
             VERSION 1_65
+            TEST_ARGS --color_output=no
           )
     else()
         render_test_runner(
             TARGET boost_test
             VERSION 1_70
-            TEST_ARGS --color_output=0
+            TEST_ARGS --color_output=no
           )
     endif()
 endif()
