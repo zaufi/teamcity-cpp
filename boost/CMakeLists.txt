@@ -11,7 +11,8 @@ if(BUILD_TESTING)
       )
     target_compile_options(
         boost_test PRIVATE
-        -Wall -Wextra -Werror
+        # TODO Check for that options
+        -Wall -Wextra -Werror -Wold-style-cast -Weffc++
       )
 
     # NOTE Boost prior 1.60 incorrectly recognize preprocessor variadics

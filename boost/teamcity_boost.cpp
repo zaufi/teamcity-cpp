@@ -207,12 +207,22 @@ struct TeamcityFormatterRegistrar
     BOOST_TEST_GLOBAL_CONFIGURATION(TeamcityFormatterRegistrar);
 #endif                                                      // BOOST_VERSION >= 106500
 
-TeamcityBoostLogFormatter::TeamcityBoostLogFormatter(const std::string& id)
-  : flowId(id)
+TeamcityBoostLogFormatter::TeamcityBoostLogFormatter()
+  : messages{}
+  , currentDetails{}
+  , flowId(getFlowIdFromEnvironment())
+#if BOOST_VERSION >= 105900
+  , currentContextDetails{}
+#endif                                                      // BOOST_VERSION >= 105900
 {}
 
-TeamcityBoostLogFormatter::TeamcityBoostLogFormatter()
-  : flowId(getFlowIdFromEnvironment())
+TeamcityBoostLogFormatter::TeamcityBoostLogFormatter(const std::string& id)
+  : messages{}
+  , currentDetails{}
+  , flowId(id)
+#if BOOST_VERSION >= 105900
+  , currentContextDetails{}
+#endif                                                      // BOOST_VERSION >= 105900
 {}
 
 void TeamcityBoostLogFormatter::log_start(
