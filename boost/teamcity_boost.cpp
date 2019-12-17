@@ -208,20 +208,20 @@ struct TeamcityFormatterRegistrar
 #endif                                                      // BOOST_VERSION >= 106500
 
 TeamcityBoostLogFormatter::TeamcityBoostLogFormatter()
-  : messages{}
-  , currentDetails{}
+  : messages()
+  , currentDetails()
   , flowId(getFlowIdFromEnvironment())
 #if BOOST_VERSION >= 105900
-  , currentContextDetails{}
+  , currentContextDetails()
 #endif                                                      // BOOST_VERSION >= 105900
 {}
 
 TeamcityBoostLogFormatter::TeamcityBoostLogFormatter(const std::string& id)
-  : messages{}
-  , currentDetails{}
+  : messages()
+  , currentDetails()
   , flowId(id)
 #if BOOST_VERSION >= 105900
-  , currentContextDetails{}
+  , currentContextDetails()
 #endif                                                      // BOOST_VERSION >= 105900
 {}
 

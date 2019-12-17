@@ -119,6 +119,16 @@ include(RenderTestRunner)
 include(CTest)
 enable_testing()
 
+if(BUILD_TESTING)
+    include(CheckCompilerOption)
+    check_compiler_option(-Wall)
+    check_compiler_option(-Wextra)
+    check_compiler_option(-Werror)
+    check_compiler_option(-Wold-style-cast LANGUAGES CXX)
+    check_compiler_option(-Wc++17-compat LANGUAGES CXX)
+    check_compiler_option(-Weffc++ LANGUAGES CXX)
+endif()
+
 #---------------------------------------------------------
 # Dive into sub-directories
 #---------------------------------------------------------
