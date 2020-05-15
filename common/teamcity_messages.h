@@ -56,7 +56,11 @@ public:
       );
     void testFinished(
         const std::string& name
-      , int durationMs = -1
+      , const std::string& flowid = std::string()
+      );
+    void testFinished(
+        const std::string& name
+      , unsigned long durationMs
       , const std::string& flowid = std::string()
       );
 

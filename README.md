@@ -44,4 +44,3 @@ so to link it with your unit tests executable, one ought to add the following sn
     find_package(teamcity-cpp-boost 1.8)
 
     add_executable(your-unit-tests-binary-name ... $<TARGET_OBJECTS:teamcity-cpp-boost> ...)
-

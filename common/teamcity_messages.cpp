@@ -156,21 +156,26 @@ void TeamcityMessages::testStarted(const std::string& name, const std::string& f
         msg.writeProperty("captureStandardOutput", "true"); // false by default
 }
 
-void TeamcityMessages::testFinished(const std::string& name, const int durationMs, const std::string& flowId)
+void TeamcityMessages::testFinished(const std::string& name, const std::string& flowId)
+{
+    RaiiMessage msg("testFinished", *m_out);
+
+    msg.writeProperty("name", name);
+    msg.writePropertyIfNonEmpty("flowId", flowId);
+}
+
+void TeamcityMessages::testFinished(const std::string& name, const unsigned long durationMs, const std::string& flowId)
 {
     RaiiMessage msg("testFinished", *m_out);
 
     msg.writeProperty("name", name);
     msg.writePropertyIfNonEmpty("flowId", flowId);
 
-    if (durationMs >= 0)
-    {
-        /// \bug W/ some locales it is possible to get a number w/ a number separator(s)!
-        /// \todo Make a test for that!
-        std::stringstream out(std::ios_base::out);
-        out << durationMs;
-        msg.writeProperty("duration", out.str());
-    }
+    /// \bug W/ some locales it is possible to get a number w/ a number separator(s)!
+    /// \todo Make a test for that!
+    std::stringstream out(std::ios_base::out);
+    out << durationMs;
+    msg.writeProperty("duration", out.str());
 }
 
 void TeamcityMessages::testFailed(const std::string& name, const std::string& message, const std::string& details, const std::string& flowId)
