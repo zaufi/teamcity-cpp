@@ -16,6 +16,8 @@ if(BUILD_TESTING)
             $<$<BOOL:${COMPILER_HAS_WALL_OPTION}>:-Wall>
             $<$<BOOL:${COMPILER_HAS_WEXTRA_OPTION}>:-Wextra>
             $<$<BOOL:${COMPILER_HAS_WERROR_OPTION}>:-Werror>
+            $<$<BOOL:${COMPILER_HAS_WPEDANTIC_OPTION}>:-Wpedantic>
+            $<$<BOOL:${COMPILER_HAS_WCONVERSION_OPTION}>:-Wconversion>
             $<$<COMPILE_LANGUAGE:CXX>:
                 $<$<BOOL:${COMPILER_HAS_WOLD_STYLE_CAST_OPTION}>:-Wold-style-cast>
                 $<$<BOOL:${COMPILER_HAS_WC_17_COMPAT_OPTION}>:-Wc++17-compat>
