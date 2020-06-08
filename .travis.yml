@@ -1,8 +1,10 @@
+dist: bionic
 language: cpp
 sudo: false
 compiler:
   - clang
   - gcc
+
 addons:
   apt:
     sources:
@@ -14,9 +16,11 @@ addons:
       - libcppunit-dev
       - libboost-test-dev
       - libgtest-dev
+
 before_script:
   - "cmake --version"
   - "mkdir gtest-bin && cd gtest-bin && cmake /usr/src/gtest && make && cd .."
+
 script:
   - export CMAKE_LIBRARY_PATH=$(pwd)/gtest-bin
   - "mkdir build && cd build && cmake .. && make && ctest -V"
