@@ -21,6 +21,7 @@ if(BUILD_TESTING)
             $<$<COMPILE_LANGUAGE:CXX>:
                 $<$<BOOL:${COMPILER_HAS_WOLD_STYLE_CAST_OPTION}>:-Wold-style-cast>
                 $<$<BOOL:${COMPILER_HAS_WC_17_COMPAT_OPTION}>:-Wc++17-compat>
+                $<$<BOOL:${COMPILER_HAS_WOVERLOADED_VIRTUAL_OPTION}>:-Woverloaded-virtual>
                 # ALERT For the GCC < 5.x this option gives warnings (Ok, errors)
                 # for the internals of the Boost Test about a non-virtual destructor.
                 $<$<AND:$<BOOL:${COMPILER_HAS_WEFFC_OPTION}>,$<CXX_COMPILER_ID:GNU>,$<VERSION_GREATER:$<CXX_COMPILER_VERSION>,5>>:-Weffc++>

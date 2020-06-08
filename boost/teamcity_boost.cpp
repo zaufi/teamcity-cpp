@@ -1,5 +1,5 @@
 /* Copyright 2011 JetBrains s.r.o.
- * Copyright 2015-2019 Alex Turbov <i.zaufi@gmail.com>
+ * Copyright 2015-2020 Alex Turbov <i.zaufi@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,14 @@
 // NOTE Due to IWYU BUG `string` header is not exported
 // properly from "teamcity_messages.h" to here...
 #include <string>                                           // IWYU pragma: keep
+
+#if __cpluscplus >= 201103L
+# define TEAMCITY_BOOST_OVERRIDE override
+# define TEAMCITY_BOOST_VIRTUAL
+#else
+# define TEAMCITY_BOOST_OVERRIDE
+# define TEAMCITY_BOOST_VIRTUAL virtual
+#endif
 
 namespace jetbrains { namespace teamcity { namespace {
 const std::string ASSERT_CTX = "Assertion has occurred in a following context:";
@@ -116,72 +124,75 @@ class TeamcityBoostLogFormatter : public boost::unit_test::unit_test_log_formatt
 #endif                                                      // BOOST_VERSION >= 105900
 
 public:
+    //BEGIN These virtuals have more than one overload
+    using boost::unit_test::unit_test_log_formatter::log_entry_value;
+    using boost::unit_test::unit_test_log_formatter::test_unit_skipped;
+    //END These virtuals have more than one overload
+
     TeamcityBoostLogFormatter(const std::string& flowId);
     TeamcityBoostLogFormatter();
 
-    virtual ~TeamcityBoostLogFormatter() {}
-
-    virtual void log_start(std::ostream&, boost::unit_test::counter_t);
-    virtual void log_finish(std::ostream&);
-    virtual void log_build_info(
+    TEAMCITY_BOOST_VIRTUAL void log_start(std::ostream&, boost::unit_test::counter_t) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void log_finish(std::ostream&) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void log_build_info(
         std::ostream&
 #if BOOST_VERSION >= 107000
       , bool
 #endif                                                      // BOOST_VERSION >= 107000
-      );
-    virtual void test_unit_start(
+      ) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void test_unit_start(
         std::ostream&
       , const boost::unit_test::test_unit&
-      );
-    virtual void test_unit_finish(
+      ) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void test_unit_finish(
         std::ostream&
       , const boost::unit_test::test_unit&
       , unsigned long
-      );
+      ) TEAMCITY_BOOST_OVERRIDE;
 
-    virtual void log_entry_start(
+    TEAMCITY_BOOST_VIRTUAL void log_entry_start(
         std::ostream&
       , const boost::unit_test::log_entry_data&
       , log_entry_types
-      );
-    virtual void log_entry_value(std::ostream&, boost::unit_test::const_string);
-    virtual void log_entry_finish(std::ostream&);
+      ) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void log_entry_value(std::ostream&, boost::unit_test::const_string) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void log_entry_finish(std::ostream&) TEAMCITY_BOOST_OVERRIDE;
 
 #if BOOST_VERSION < 105900
-    virtual void log_exception(
+    TEAMCITY_BOOST_VIRTUAL void log_exception(
         std::ostream&
       , const boost::unit_test::log_checkpoint_data&
       , boost::unit_test::const_string
-      );
-    virtual void test_unit_skipped(std::ostream&, const boost::unit_test::test_unit&);
+      ) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void test_unit_skipped(std::ostream&, const boost::unit_test::test_unit&) TEAMCITY_BOOST_OVERRIDE;
 #else                                                       // BOOST_VERSION >= 105900
-    virtual void log_exception_start(
+    TEAMCITY_BOOST_VIRTUAL void log_exception_start(
         std::ostream&
       , const boost::unit_test::log_checkpoint_data&
       , const boost::execution_exception&
-      );
-    virtual void test_unit_skipped(
+      ) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void test_unit_skipped(
         std::ostream&
       , const boost::unit_test::test_unit&
       , boost::unit_test::const_string
-      );
+      ) TEAMCITY_BOOST_OVERRIDE;
 
-    virtual void log_exception_finish(std::ostream&);
-    virtual void entry_context_start(std::ostream&, boost::unit_test::log_level);
+    TEAMCITY_BOOST_VIRTUAL void log_exception_finish(std::ostream&) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void entry_context_start(std::ostream&, boost::unit_test::log_level) TEAMCITY_BOOST_OVERRIDE;
 # if BOOST_VERSION < 106500
-    virtual void log_entry_context(std::ostream&, boost::unit_test::const_string);
-    virtual void entry_context_finish(std::ostream&);
+    TEAMCITY_BOOST_VIRTUAL void log_entry_context(std::ostream&, boost::unit_test::const_string) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void entry_context_finish(std::ostream&) TEAMCITY_BOOST_OVERRIDE;
 # else                                                      // BOOST_VERSION >= 106500
-    virtual void log_entry_context(
+    TEAMCITY_BOOST_VIRTUAL void log_entry_context(
         std::ostream&
       , boost::unit_test::log_level
       , boost::unit_test::const_string
-      );
-    virtual void entry_context_finish(std::ostream&, boost::unit_test::log_level);
+      ) TEAMCITY_BOOST_OVERRIDE;
+    TEAMCITY_BOOST_VIRTUAL void entry_context_finish(std::ostream&, boost::unit_test::log_level) TEAMCITY_BOOST_OVERRIDE;
 # endif                                                     // BOOST_VERSION >= 106500
 #endif                                                      // BOOST_VERSION >= 105900
 #if BOOST_VERSION >= 106200
-    virtual std::string get_default_stream_description() const
+    TEAMCITY_BOOST_VIRTUAL std::string get_default_stream_description() const TEAMCITY_BOOST_OVERRIDE
     {
         return "TeamCity (via service messages)";
     }

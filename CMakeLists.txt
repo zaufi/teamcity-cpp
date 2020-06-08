@@ -129,6 +129,7 @@ if(BUILD_TESTING)
     check_compiler_option(-Wold-style-cast LANGUAGES CXX)
     check_compiler_option(-Wc++17-compat LANGUAGES CXX)
     check_compiler_option(-Weffc++ LANGUAGES CXX)
+    check_compiler_option(-Woverloaded-virtual LANGUAGES CXX)
 endif()
 
 #---------------------------------------------------------
